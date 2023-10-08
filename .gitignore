@@ -1,0 +1,6 @@
+.vscode
+.idea
+*/bin
+*/obj
+*.sln*.user
+packages
