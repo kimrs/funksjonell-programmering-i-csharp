@@ -110,11 +110,87 @@ I mattematikken, så er funksjon en mapping mellom to set. Domenet og codomenet.
 
 #Core Techniques
 ##Option
-I funksjonell programmering bruker man ikke null.
-Man bruker Option isteden. 
-Kodesnutt s.76
+I C#, så er det implementasjonsdetaljer som bestemmer hvorvidt null returneres eller en exception kastes.
+Dette har gjort bibliotekene våre inkonsekvente.
+
+```csharp
+using System.Collections.Specialized;
+using static System.Console;
+
+try
+{
+    _ = new NameValueCollection()["green"];
+    WriteLine("green!");
+
+    _ = new Dictionary<string, string>()["blue"];
+    WriteLine("blue!");
+}
+catch (Exception ex)
+{
+    WriteLine(ex.GetType().Name);
+}
+/*
+    green!
+    KeyNotFoundException
+*/
+```
+I funksjonell programmering bruker man ikke null. Man kaster heller ikke ekseption.
+Mangelen på null og exception tvinger oss til å være mer konsekvente i måten vi 
+tilfeller der ugyldige argumenter
+Så hva bruker vi isteden?
+Option<T>
+Option er en wrapper som kan være None | Some(T). I C# kan vi enkelt håndtere None og Some
+caset med en switch expression
+
+```csharp
+string Greet(Option<string> greetee)
+    => greetee switch
+    {
+        None => "Sorry, who?",
+        Some(name) => $"Hello, {name}"
+    };
+```
+
+Desverre så lurte jeg dere. Dette vil ikke kompilere, vi må skrive det på en langt styggere måte
+
+```csharp
+string Greet(Option<string> greetee)
+    => greetee switch
+    {
+        None<string> => "Sorry, who?",
+        Some<string>(var name) => $"Hello, {name}"
+        _ => throw new ArgumentException("Option must be None or Some")
+    };
+```
+
+Så istedenfor så kan vi skjule det stygge i en Match funksjon
+
+```csharp
+static R Match<T, R> (this Option<T> opt, Func<R> None, Func<T, R> Some)
+    => opt switch
+    {
+        None<T> => None(),
+        Some<T>(var t) => Some(t),
+        _ => throw new ArgumentException("Option must be None or Some")
+    };
+```
+
+Greet funksjonen vår ser da slik ut. Strengt talt så er det ikke nødvendig å skrive None eller Some
+Det er ryddig i denne presentasjonen
+
+```csharp
+string Greet(Option<string> greetee)
+    => greetee.Match
+    (
+        None: () => "Sorry, who?",
+        Some: (name) => $"Hello, {name}"
+    );
+```
 
 
+
+
+TODO: 
 
 
 
