@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunksjonellProgrammeringICS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunksjonellProgrammering.Tests", "FunksjonellProgrammering.Tests\FunksjonellProgrammering.Tests.csproj", "{B0481B2D-065C-4FFA-B52E-DEF36D509762}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LaYumba.Functional", "functional-csharp-code\LaYumba.Functional\LaYumba.Functional.csproj", "{E5C9FE36-C050-4E25-A26A-0093A5E523CA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{B0481B2D-065C-4FFA-B52E-DEF36D509762}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0481B2D-065C-4FFA-B52E-DEF36D509762}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0481B2D-065C-4FFA-B52E-DEF36D509762}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5C9FE36-C050-4E25-A26A-0093A5E523CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5C9FE36-C050-4E25-A26A-0093A5E523CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5C9FE36-C050-4E25-A26A-0093A5E523CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5C9FE36-C050-4E25-A26A-0093A5E523CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -97,11 +97,25 @@ Heldigvis, så har Mads Torgersen begynt å implementer noen funksjonelle konsep
 Linq
 Pattern matching
 Records
+Tuples
 
 Jeg vil i dette foredraget vise dere hvordan vi kan løse oppgaven funksjonelt til tross for kravet om å
 progge i C#
 
-#Bilde 2
+#Bilde Purity etc.
+
+#Bilde 2 - What is a funcion
+
+I mattematikken, så er funksjon en mapping mellom to set. Domenet og codomenet. 
+
+#Core Techniques
+##Option
+I funksjonell programmering bruker man ikke null.
+Man bruker Option isteden. 
+Kodesnutt s.76
+
+
+
 
 
 

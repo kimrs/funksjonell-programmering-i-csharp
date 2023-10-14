@@ -1,4 +1,6 @@
 namespace FunksjonellProgrammering.Tests;
+using LaYumba.Functional;
+using static LaYumba.Functional.F;
 
 public class Tests
 {
