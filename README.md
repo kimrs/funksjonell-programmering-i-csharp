@@ -1,6 +1,21 @@
 # funksjonell-programmering-i-csharp
 A presentation that I will do at OPKOKO 23.2 Tyrifjord og P2P OPK1D Katrineholm
 
+
+# Cloning the repo
+Repo has a submodule either use the `--recurse-submodules` flag
+
+```shell
+git clone --recurse-submodules git@github.com:kimrs/functional-programming-in-csharp.git
+```
+
+Or, if you forgot to use the flag
+
+```shell
+git submodule init
+git submodule update
+```
+
 ## Roadmap
 
 What they | Before | After
@@ -187,10 +202,44 @@ string Greet(Option<string> greetee)
     );
 ```
 
+TODO: Smart constructor pattern med Domain Primitives
+TODO: Everything is a stream. Se på IOption som en spesiell type
+liste som enten kan ha en verdi eller ingen. Da vil 
+
+# Map
+Map i funksjonell programmering er det samme som Select.
+```csharp
+public static IEnumerable<R> Map<T, R>(
+  this IEnumerable<T> ts, Func<T, R> f
+) => ts.Select(f);
+```
+Den brukes til å kalle en funksjon på den indre verdien i en datastruktur som for eksempel IEnumerable.
+Som jeg nevnte, så kan vi se på en Option som ei liste. Det betyr at `Map` også fungerer på
+Option. I det tilfellet vil 'f' kalles på ts kun hvis option er en Some.
+Dette er likt det som skjer hvis ts er en tom liste. Select vil i det tilfellet returnere en tom liste
+
+## Functor
+Det vi kaller typer som har en Map funksjon definert for seg
+
+# Bind
+Gjør det samme som map, men fungerer på funksjoner som returnerer Option.
+## Unngå stacking
+## Monad 
+Typer som har en Bind funksjon definert for seg
+
+## Regular vs elevated? s.111
+
+# Either
+
+# Eksempel
+Mulig jeg bruker eksempelet gradvis.
 
 
 
-TODO: 
+
+
+
+
 
 
 
