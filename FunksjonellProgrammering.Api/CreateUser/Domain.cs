@@ -1,9 +1,11 @@
-﻿namespace FunksjonellProgrammering.Api.CreateUser;
+﻿using FunksjonellProgrammering.Api.ValueObjects;
+
+namespace FunksjonellProgrammering.Api.CreateUser;
 
 public class Domain
 {
     public Domain(
-        string name,
+        Name name,
         int role
     )
     {
@@ -11,6 +13,6 @@ public class Domain
         Role = role;
     }
     
-    public string Name { get; }
+    public Name Name { get; }
     public int Role { get; }
 }

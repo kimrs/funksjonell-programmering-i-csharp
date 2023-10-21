@@ -1,15 +1,17 @@
-﻿namespace FunksjonellProgrammering.Api.GetUser;
+﻿using FunksjonellProgrammering.Api.ValueObjects;
+
+namespace FunksjonellProgrammering.Api.GetUser;
 
 public class Domain
 {
-    public Domain(int id, string name, int role)
+    public Domain(UserId id, Name name, int role)
     {
         Id = id;
         Name = name;
         Role = role;
     }
     
-    public int Id { get; }
-    public string Name { get; }
+    public UserId Id { get; }
+    public Name Name { get; }
     public int Role { get; }
 }
