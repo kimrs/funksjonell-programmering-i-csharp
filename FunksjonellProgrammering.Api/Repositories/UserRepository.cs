@@ -1,12 +1,13 @@
 ﻿using Dapper;
-using FunksjonellProgrammering.Api.Entities;
+using FunksjonellProgrammering.Api.GetUser;
+using Domain = FunksjonellProgrammering.Api.CreateUser;
 
 namespace FunksjonellProgrammering.Api.Repositories;
 
 public interface IUserRepository
 {
-    Task<IEnumerable<User>> GetAll();
-    Task Create(User user);
+    Task<IEnumerable<GetUser.Domain>> GetAll();
+    Task Create(CreateUser.Domain domain);
 }
 
 public class UserRepository
@@ -16,8 +17,8 @@ public class UserRepository
         SELECT * FROM Users
     """;
     private const string _createUserSql = """
-        INSERT INTO Users (Id, Name, Role)
-        VALUES (@Id, @Name, @Role)
+        INSERT INTO Users (Name, Role)
+        VALUES (@Name, @Role)
     """;
     
     private readonly DataContext _dataDataContext;
@@ -25,15 +26,16 @@ public class UserRepository
     public UserRepository(DataContext dataContext)
         => _dataDataContext = dataContext;
 
-    public async Task<IEnumerable<User>> GetAll()
+    public async Task<IEnumerable<GetUser.Domain>> GetAll()
     {
         using var connection = _dataDataContext.CreateConnection();
-        return await connection.QueryAsync<User>(_getAllSql);
+        var entities = await connection.QueryAsync<Entity>(_getAllSql);
+        return entities.Select(e => e.ToDomain());
     }
 
-    public async Task Create(User user)
+    public async Task Create(CreateUser.Domain domain)
     {
         using var connection = _dataDataContext.CreateConnection();
-        await connection.ExecuteAsync(_createUserSql, user);
+        await connection.ExecuteAsync(_createUserSql, domain);
     }
 }
