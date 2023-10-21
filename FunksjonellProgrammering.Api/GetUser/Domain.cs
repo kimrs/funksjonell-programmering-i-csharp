@@ -4,7 +4,7 @@ namespace FunksjonellProgrammering.Api.GetUser;
 
 public class Domain
 {
-    public Domain(UserId id, Name name, int role)
+    public Domain(UserId id, Name name, Role role)
     {
         Id = id;
         Name = name;
@@ -13,5 +13,5 @@ public class Domain
     
     public UserId Id { get; }
     public Name Name { get; }
-    public int Role { get; }
+    public Role Role { get; }
 }

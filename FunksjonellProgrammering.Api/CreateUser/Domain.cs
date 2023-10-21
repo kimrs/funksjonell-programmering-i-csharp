@@ -6,13 +6,13 @@ public class Domain
 {
     public Domain(
         Name name,
-        int role
+        Role role
     )
     {
-        Name = name;
+        Name = name ?? throw new ArgumentNullException(nameof(name));
         Role = role;
     }
     
     public Name Name { get; }
-    public int Role { get; }
+    public Role Role { get; }
 }

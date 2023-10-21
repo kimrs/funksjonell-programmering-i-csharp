@@ -1,3 +1,5 @@
-﻿namespace FunksjonellProgrammering.Api.CreateUser;
+﻿using FunksjonellProgrammering.Api.ValueObjects;
 
-public record Dto(string Name, int Role);
+namespace FunksjonellProgrammering.Api.CreateUser;
+
+public record Dto(string Name, Role Role);

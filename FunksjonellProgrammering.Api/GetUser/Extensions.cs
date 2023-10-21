@@ -8,7 +8,9 @@ public static class Extensions
         => new(
             new UserId(e.Id),
             new Name(e.Name),
-            e.Role
+            (Role)e.Role
         );
 
+    public static Dto ToDto(this Domain d)
+        => new(d.Id.Value, d.Name.Value, d.Role);
 }
