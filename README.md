@@ -121,7 +121,13 @@ Eksempel:
 Når en funksjon trenger konfigurasjoner som er tilgjengelige ved oppstart og som ikke endrer seg. 
 
 
-
+## Om applikasjonen
+Vil i utgangspunktet si at teamet som lagde dette apiet har gjort en god jobb.
+De har allerede valgt å separere basert på foretningsprosesser istedenfor
+lagvis med, en mappe for dtoer og en mappe for domeneobjekter osv.
+Om endepunktet mottar noe uforutset, så returnerer vi BadRequest
+og om noe feiler, så returnerer vi InternalServerError og logger detaljene.
+Så ting tyder på at de er opptatt av sikkerhet her. 
 
 
 

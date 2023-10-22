@@ -12,6 +12,9 @@ public class Name
         _value = value;
     }
 
+    /*
+     *  Noe a'la dette promoterer secure by design
+     */
     private void IsValid(string value)
     {
         if (string.IsNullOrEmpty(value))

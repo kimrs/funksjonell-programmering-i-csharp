@@ -6,11 +6,11 @@ public class Domain
 {
     public Domain(
         Name name,
-        Role role
+        Role? role
     )
     {
         Name = name ?? throw new ArgumentNullException(nameof(name));
-        Role = role;
+        Role = role ?? throw new ArgumentNullException(nameof(role));
     }
     
     public Name Name { get; }

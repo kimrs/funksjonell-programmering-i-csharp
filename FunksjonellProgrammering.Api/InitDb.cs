@@ -1,12 +1,13 @@
 ﻿using System.Data;
 using Dapper;
+using FunksjonellProgrammering.Api.Primitives;
 using Microsoft.Data.Sqlite;
 
 namespace FunksjonellProgrammering.Api;
 
-public class DataContext
+public class InitDb
 {
-    private const string _createUserTableSql = """
+    private static readonly SqlTemplate _createUserTableSql = """
         DROP TABLE IF EXISTS Users;
         CREATE TABLE IF NOT EXISTS
         Users (
@@ -15,17 +16,15 @@ public class DataContext
             Role INTEGER
         )
     """;
-    private readonly IConfiguration _configuration;
 
-    public DataContext(IConfiguration configuration)
-        => _configuration = configuration;
+    private readonly ConnectionString _connectionString;
 
-    public IDbConnection CreateConnection()
-        => new SqliteConnection(_configuration.GetConnectionString("ApiDb"));
+    public InitDb(IConfiguration configuration)
+        => _connectionString = configuration.GetConnectionString("ApiDb");
 
     public async Task Init()
     {
-        using var connection = CreateConnection();
+        await using var connection = new SqliteConnection(_connectionString);
         await connection.ExecuteAsync(_createUserTableSql);
     }
 }
