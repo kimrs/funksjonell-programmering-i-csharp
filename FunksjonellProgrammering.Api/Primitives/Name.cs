@@ -1,12 +1,15 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace FunksjonellProgrammering.Api.ValueObjects;
+namespace FunksjonellProgrammering.Api.Primitives;
 
 public class Name
 {
+    public static implicit operator string(Name n) => n._value;
+    public static implicit operator Name(string s) => new(s);
+    
     private readonly string _value;
-
-    public Name(string value)
+    
+    private Name(string value)
     {
         IsValid(value);
         _value = value;
@@ -27,6 +30,4 @@ public class Name
             throw new ArgumentException($"{nameof(Name)} must start with a capital letter");
         }
     }
-
-    public string Value => _value;
 }

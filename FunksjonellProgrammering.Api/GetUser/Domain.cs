@@ -1,4 +1,4 @@
-﻿using FunksjonellProgrammering.Api.ValueObjects;
+﻿using FunksjonellProgrammering.Api.Primitives;
 
 namespace FunksjonellProgrammering.Api.GetUser;
 

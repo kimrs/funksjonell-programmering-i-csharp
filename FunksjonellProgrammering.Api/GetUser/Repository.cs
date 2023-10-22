@@ -1,8 +1,4 @@
-﻿using Dapper;
-using FunksjonellProgrammering.Api.Primitives;
-using FunksjonellProgrammering.Api.ValueObjects;
-using LaYumba.Functional;
-using Microsoft.Data.Sqlite;
+﻿using FunksjonellProgrammering.Api.Primitives;
 
 namespace FunksjonellProgrammering.Api.GetUser;
 
@@ -23,13 +19,11 @@ public class Repository
         => _connectionString = configuration.GetConnectionString("ApiDb");
 
     public IEnumerable<Domain> GetById(UserId id)
-        => _connectionString.Retrieve<Entity>(_byIdSql)(id.Value)
+        => _connectionString.Retrieve<Entity>(_byIdSql)(id)
             .Select(x => x.ToDomain());
 
     public IEnumerable<Domain> GetAll()
-    {
-        return _connectionString
+        => _connectionString
             .Retrieve<Entity>(_selectSql)(null)
             .Select(x => x.ToDomain());
-    }
 }

@@ -1,10 +1,13 @@
-﻿namespace FunksjonellProgrammering.Api.ValueObjects;
+﻿namespace FunksjonellProgrammering.Api.Primitives;
 
 public class UserId
 {
+    public static implicit operator int(UserId id) => id._value;
+    public static implicit operator UserId(int i) => new(i);
+    
     private readonly int _value;
 
-    public UserId(int value)
+    private UserId(int value)
     {
         if (value < 0)
         {
@@ -12,6 +15,4 @@ public class UserId
         }
         _value = value;
     }
-
-    public int Value => _value;
 }

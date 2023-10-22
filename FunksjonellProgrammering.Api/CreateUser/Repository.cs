@@ -23,10 +23,5 @@ public class Repository
         => _connectionString = configuration.GetConnectionString("ApiDb") ?? throw new ArgumentNullException();
     
     public void Create(Domain domain)
-    {
-        _connectionString.Save(_createUserSql)(domain.ToEntity());
-        // throw new Exception("Uh-oh! Spaghetti O's");
-        // using var connection = new SqliteConnection(_connectionString);
-        // connection.Execute(CreateUserSql, domain.ToEntity());
-    }
+        => _connectionString.Save(_createUserSql)(domain.ToEntity());
 }

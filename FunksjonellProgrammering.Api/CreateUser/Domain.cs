@@ -1,4 +1,4 @@
-﻿using FunksjonellProgrammering.Api.ValueObjects;
+﻿using FunksjonellProgrammering.Api.Primitives;
 
 namespace FunksjonellProgrammering.Api.CreateUser;
 
@@ -6,7 +6,7 @@ public class Domain
 {
     public Domain(
         Name name,
-        Role? role
+        Role role
     )
     {
         Name = name ?? throw new ArgumentNullException(nameof(name));

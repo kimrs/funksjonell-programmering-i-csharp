@@ -1,5 +1,5 @@
-﻿using FunksjonellProgrammering.Api.ValueObjects;
+﻿using FunksjonellProgrammering.Api.Primitives;
 
 namespace FunksjonellProgrammering.Api.GetUser;
 
-public record Dto(int Id, string Name, Role Role);
+public record Dto(int Id, string Name, string Role);
