@@ -30,4 +30,6 @@ public class Name
             throw new ArgumentException($"{nameof(Name)} must start with a capital letter");
         }
     }
+
+    public override string ToString() => _value;
 }
