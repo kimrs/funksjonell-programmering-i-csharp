@@ -24,16 +24,12 @@ public static class ConnectionStringExtension
                 this ConnectionString connectionString,
                 SqlTemplate sql
         )
-        {
-                return param => Connect(connectionString, c => c.Query<T>(sql, param));
-        }
+                => param => Connect(connectionString, c => c.Query<T>(sql, param));
 
         public static Func<object, int> Save
         (
                 this ConnectionString connectionString,
                 SqlTemplate sql
         )
-        {
-                return param => Connect(connectionString, c => c.Execute(sql, param));
-        }
+                => param => Connect(connectionString, c => c.Execute(sql, param));
 }

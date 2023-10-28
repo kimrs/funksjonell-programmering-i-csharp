@@ -1,6 +1,4 @@
-﻿using Dapper;
-using FunksjonellProgrammering.Api.Primitives;
-using Microsoft.Data.Sqlite;
+﻿using FunksjonellProgrammering.Api.Primitives;
 
 namespace FunksjonellProgrammering.Api.CreateUser;
 
@@ -20,8 +18,15 @@ public class Repository
     private readonly ConnectionString _connectionString;
 
     public Repository(IConfiguration configuration)
-        => _connectionString = configuration.GetConnectionString("ApiDb") ?? throw new ArgumentNullException();
+        => _connectionString = configuration.GetConnectionString("ApiDb")
+                               ?? throw new ArgumentNullException();
     
     public void Create(Domain domain)
-        => _connectionString.Save(_createUserSql)(domain.ToEntity());
+        => _connectionString.Save(_createUserSql)(Entity.CreateFrom(domain));
+
+    private record Entity(string Name, string Role)
+    {
+        public static Entity CreateFrom(Domain domain)
+            => new(domain.Name, domain.Role);
+    }
 }
