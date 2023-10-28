@@ -22,7 +22,7 @@ public class Tests
         {
             Converters =
             {
-                new NameConverter()
+                new StringConverter<Name>()
             }
         };
         

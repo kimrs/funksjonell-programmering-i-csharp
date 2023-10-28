@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 using FunksjonellProgrammering.Api;
+using FunksjonellProgrammering.Api.Primitives;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +11,8 @@ builder.Services.AddSingleton<FunksjonellProgrammering.Api.GetUser.IRepository, 
 builder.Services.AddSingleton<FunksjonellProgrammering.Api.CreateUser.IRepository, FunksjonellProgrammering.Api.CreateUser.Repository>();
 builder.Services.AddControllers().AddJsonOptions(o =>
 {
-    o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    // o.JsonSerializerOptions.Converters.Add(new NameConverter());
+    o.JsonSerializerOptions.Converters.Add(new StringConverter<Name>());
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

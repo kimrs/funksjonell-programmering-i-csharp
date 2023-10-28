@@ -1,5 +1,4 @@
-﻿using FunksjonellProgrammering.Api.Primitives;
-
+﻿
 namespace FunksjonellProgrammering.Api.GetUser;
 
 public static class Extensions
