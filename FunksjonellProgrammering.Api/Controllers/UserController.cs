@@ -32,12 +32,12 @@ public class UserController : ControllerBase
 
     [HttpPost]
     public IActionResult Create(
-        CreateUser.Dto user
+        CreateUser.Domain user
     )
     {
         try
         {
-            _createUser.Create(user.ToDomain());
+            _createUser.Create(user);
             return Ok("User created");
         }
         catch (ArgumentException ex)

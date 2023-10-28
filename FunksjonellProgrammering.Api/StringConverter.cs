@@ -6,10 +6,11 @@ using FunksjonellProgrammering.Api.Primitives;
 
 namespace FunksjonellProgrammering.Api;
 
+//TODO: Kan denne returnere 400 istedenfor 500 
 public class StringConverter<T> : JsonConverter<T>
 {
     private readonly MethodInfo _stringOperator = typeof(T).GetMethod("op_Implicit", new[] {typeof(string)})
-                                           ?? throw new ArgumentException($"{typeof(T)} must have implicit operator");
+                                           ?? throw new Exception($"{typeof(T)} must have implicit operator");
 
     public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         => (T)_stringOperator.Invoke(null, new[] { reader.GetString() });

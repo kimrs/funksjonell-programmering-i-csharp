@@ -3,4 +3,4 @@ using FunksjonellProgrammering.Api.Primitives;
 
 namespace FunksjonellProgrammering.Api.CreateUser;
 
-public record Dto(Name Name, string Role);
+public record Dto(Name Name, Role Role);

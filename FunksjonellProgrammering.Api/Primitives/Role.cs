@@ -18,6 +18,6 @@ public class Role
     {
         _value = RoleEnum.TryParse(s, out RoleEnum value)
             ? value
-            : throw new ArgumentException(nameof(Role));
+            : throw new ArgumentException($"{nameof(Role)} must be known");
     }
 }
