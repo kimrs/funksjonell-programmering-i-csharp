@@ -1,5 +1,3 @@
-using FunksjonellProgrammering.Api.CreateUser;
-using FunksjonellProgrammering.Api.GetUser;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FunksjonellProgrammering.Api.Controllers;
@@ -18,16 +16,16 @@ public class UserController : ControllerBase
         GetUser.IRepository getUser
     )
     {
+        _logger = logger;
         _createUser = createUser;
         _getUser = getUser;
-        _logger = logger;
     }
 
     [HttpGet]
     public IActionResult GetAll()
     {
         var users = _getUser.GetAll();
-        return Ok(users.Select(u => u.ToDto()));
+        return Ok(users);
     }
 
     [HttpPost]
@@ -35,20 +33,8 @@ public class UserController : ControllerBase
         CreateUser.Domain user
     )
     {
-        try
-        {
-            _createUser.Create(user);
-            return Ok("User created");
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            _logger.Log(LogLevel.Error, ex.Message);
-            return StatusCode(500);
-        }
+        _createUser.Create(user);
+        return Ok("User created");
     }
 }
 

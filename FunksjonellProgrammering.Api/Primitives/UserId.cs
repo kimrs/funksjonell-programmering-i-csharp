@@ -15,4 +15,7 @@ public class UserId
         }
         _value = value;
     }
+
+    public override string ToString()
+        => $"{_value}";
 }

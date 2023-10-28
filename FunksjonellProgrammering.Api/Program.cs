@@ -14,6 +14,7 @@ builder.Services.AddControllers().AddJsonOptions(o =>
     // o.JsonSerializerOptions.Converters.Add(new NameConverter());
     o.JsonSerializerOptions.Converters.Add(new StringConverter<Name>());
     o.JsonSerializerOptions.Converters.Add(new StringConverter<Role>());
+    o.JsonSerializerOptions.Converters.Add(new IntConverter<UserId, int>());
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

@@ -19,11 +19,22 @@ public class Repository
         => _connectionString = configuration.GetConnectionString("ApiDb");
 
     public IEnumerable<Domain> GetById(UserId id)
-        => _connectionString.Retrieve<Entity>(_byIdSql)(id)
+        => _connectionString
+            .Retrieve<Entity>(_byIdSql)(id)
             .Select(x => x.ToDomain());
 
     public IEnumerable<Domain> GetAll()
         => _connectionString
             .Retrieve<Entity>(_selectSql)(null)
             .Select(x => x.ToDomain());
+
+    private class Entity
+    {
+        private int Id { get; set; }
+        private string? Name { get; set; }
+        private string? Role { get; set; }
+        
+        public Domain ToDomain()
+            => new(Id, Name, Role);
+    }
 }

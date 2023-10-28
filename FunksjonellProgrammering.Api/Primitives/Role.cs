@@ -9,7 +9,7 @@ public enum RoleEnum
 
 public class Role
 {
-    public static implicit operator string(Role r) => r._value.ToString();
+    public static implicit operator string(Role r) => $"{r._value}";
     public static implicit operator Role(string s) => new(s);
     
     private readonly RoleEnum _value;
@@ -20,4 +20,7 @@ public class Role
             ? value
             : throw new ArgumentException($"{nameof(Role)} must be known");
     }
+
+    public override string ToString()
+        => $"{_value}";
 }
