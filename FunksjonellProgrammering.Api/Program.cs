@@ -1,12 +1,16 @@
+using Dapper;
 using FunksjonellProgrammering.Api;
 using FunksjonellProgrammering.Api.Primitives;
+
+SqlMapper.AddTypeHandler(new NameTypeHandler());
+SqlMapper.AddTypeHandler(new RoleTypeHandler());
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddSingleton<InitDb>();
 builder.Services.AddSingleton<FunksjonellProgrammering.Api.GetUser.IRepository, FunksjonellProgrammering.Api.GetUser.Repository>();
-builder.Services.AddSingleton<FunksjonellProgrammering.Api.CreateUser.IRepository, FunksjonellProgrammering.Api.CreateUser.Repository>();
+// builder.Services.AddSingleton<FunksjonellProgrammering.Api.CreateUser.IRepository, FunksjonellProgrammering.Api.CreateUser.Repository>();
 builder.Services.AddControllers(o =>
 {
     o.ModelBinderProviders.Insert(0, new UserIdModelBinderProvider());

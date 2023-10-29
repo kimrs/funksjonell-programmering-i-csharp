@@ -1,10 +1,10 @@
 ﻿using FunksjonellProgrammering.Api.Primitives;
 
-namespace FunksjonellProgrammering.Api.CreateUser;
+namespace FunksjonellProgrammering.Api.GetUser;
 
-public class Domain
+public class Response
 {
-    public Domain(
+    public Response(
         Name name,
         Role role
     )
@@ -12,7 +12,7 @@ public class Domain
         Name = name ?? throw new ArgumentNullException(nameof(name));
         Role = role ?? throw new ArgumentNullException(nameof(role));
     }
-    
+
     public Name Name { get; }
     public Role Role { get; }
 }

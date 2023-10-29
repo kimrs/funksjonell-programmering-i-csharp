@@ -4,7 +4,7 @@ namespace FunksjonellProgrammering.Api.GetUser;
 
 public interface IRepository
 {
-    IEnumerable<Domain> Get(int id);
+    IEnumerable<Response> Handle(int id);
 }
 
 public class Repository
@@ -14,22 +14,25 @@ public class Repository
 
     private readonly ConnectionString _connectionString;
 
-    public Repository(IConfiguration configuration)
+    public Repository(
+        IConfiguration configuration
+    )
         => _connectionString = configuration.GetConnectionString("ApiDb")
                                ?? throw new ArgumentNullException();
 
-    public IEnumerable<Domain> Get(int id)
+    public IEnumerable<Response> Handle(
+        int id
+    )
         => _connectionString
             .Retrieve<Dto>(_selectSql)(new {Id = id})
-            .Select(x => x.ToDomain());
+            .Select(x => x.ToResponse());
 
     private class Dto
     {
-        private int Id { get; set; }
         private string? Name { get; set; }
         private string? Role { get; set; }
         
-        public Domain ToDomain()
-            => new(Id, Name, Role);
+        public Response ToResponse()
+            => new(Name, Role);
     }
 }

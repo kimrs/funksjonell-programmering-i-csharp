@@ -1,4 +1,6 @@
+using System.Reactive;
 using FunksjonellProgrammering.Api.Primitives;
+using LaYumba.Functional;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FunksjonellProgrammering.Api.Controllers;
@@ -7,15 +9,24 @@ namespace FunksjonellProgrammering.Api.Controllers;
 [Route("[controller]")]
 public class UserController : ControllerBase
 {
-    private readonly CreateUser.IRepository _createUser;
+    private static readonly SqlTemplate _createUserSql = """
+        INSERT INTO Users (Name, Role)
+        VALUES (@Name, @Role)
+    """;
+    
+    private readonly Func<CreateUser.Request, int> _createUser;
     private readonly GetUser.IRepository _getUser;
 
     public UserController(
-        CreateUser.IRepository createUser,
+        IConfiguration configuration,
         GetUser.IRepository getUser
     )
     {
-        _createUser = createUser;
+         ConnectionString connectionString = configuration.GetConnectionString("ApiDb")
+                            ?? throw new Exception("Connection string is missing");
+         
+         _createUser = connectionString.Save(_createUserSql);
+    
         _getUser = getUser;
     }
     
@@ -24,17 +35,17 @@ public class UserController : ControllerBase
         UserId id
     )
     {
-        var user = _getUser.Get(id);
+        var user = _getUser.Handle(id);
         return Ok(user);
     }
 
     [HttpPost]
     public IActionResult Create(
-        CreateUser.Domain user
+        CreateUser.Request user
     )
     {
-        _createUser.Create(user);
-        return Created("/user/", user);
+        var id = _createUser(user);
+        return Created($"/user/{id}", user);
     }
 }
 
