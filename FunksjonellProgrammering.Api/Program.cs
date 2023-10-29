@@ -11,10 +11,9 @@ builder.Services.AddSingleton<FunksjonellProgrammering.Api.GetUser.IRepository, 
 builder.Services.AddSingleton<FunksjonellProgrammering.Api.CreateUser.IRepository, FunksjonellProgrammering.Api.CreateUser.Repository>();
 builder.Services.AddControllers().AddJsonOptions(o =>
 {
-    // o.JsonSerializerOptions.Converters.Add(new NameConverter());
-    o.JsonSerializerOptions.Converters.Add(new StringConverter<Name>());
-    o.JsonSerializerOptions.Converters.Add(new StringConverter<Role>());
-    o.JsonSerializerOptions.Converters.Add(new IntConverter<UserId, int>());
+    o.JsonSerializerOptions.Converters.Add(new PrimitiveConverter<Role, string>());
+    o.JsonSerializerOptions.Converters.Add(new PrimitiveConverter<Name, string>());
+    o.JsonSerializerOptions.Converters.Add(new PrimitiveConverter<UserId, int>());
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

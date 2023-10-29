@@ -22,11 +22,11 @@ public class Repository
                                ?? throw new ArgumentNullException();
     
     public void Create(Domain domain)
-        => _connectionString.Save(_createUserSql)(Entity.CreateFrom(domain));
+        => _connectionString.Save(_createUserSql)(Dto.CreateFrom(domain));
 
-    private record Entity(string Name, string Role)
+    private record Dto(string Name, string Role)
     {
-        public static Entity CreateFrom(Domain domain)
+        public static Dto CreateFrom(Domain domain)
             => new(domain.Name, domain.Role);
     }
 }

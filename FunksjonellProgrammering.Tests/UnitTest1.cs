@@ -22,7 +22,7 @@ public class Tests
         {
             Converters =
             {
-                new StringConverter<Name>()
+                new PrimitiveConverter<Name, string>()
             }
         };
         

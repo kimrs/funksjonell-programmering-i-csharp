@@ -4,19 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace FunksjonellProgrammering.Api;
 
-public class StringConverter<T> : JsonConverter<T>
-{
-    private readonly MethodInfo _stringOperator = typeof(T).GetMethod("op_Implicit", new[] {typeof(string)})
-                                           ?? throw new Exception($"{typeof(T)} must have implicit operator");
-
-    public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        => (T)_stringOperator.Invoke(null, new[] { reader.GetString() });
-
-    public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
-        => writer.WriteStringValue($"{value}");
-}
-
-public class IntConverter<T, R> : JsonConverter<T>
+public class PrimitiveConverter<T, R> : JsonConverter<T>
 {
     private readonly MethodInfo _rOperator = typeof(T).GetMethod("op_Implicit", new[] {typeof(R)})
                                            ?? throw new Exception($"{typeof(T)} must have implicit operator");
@@ -24,8 +12,20 @@ public class IntConverter<T, R> : JsonConverter<T>
     private readonly MethodInfo _tOperator = typeof(T).GetMethod("op_Implicit", new[] {typeof(T)})
                                            ?? throw new Exception($"{typeof(T)} must have implicit operator");
 
-    public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        => (T)_rOperator.Invoke(null, new[] { (object)reader.GetInt64() });
+    public override T Read(
+        ref Utf8JsonReader reader,
+        Type typeToConvert,
+        JsonSerializerOptions options
+    )
+    {
+        object parameter = reader.TokenType switch
+        {
+            JsonTokenType.String => reader.GetString(),
+            JsonTokenType.Number => reader.GetInt64()
+        };
+
+        return (T)_rOperator.Invoke(null, new[] { parameter });
+    }
 
     public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
     {
