@@ -12,7 +12,7 @@ public class UserId
     {
         if (value <= 0)
         {
-            throw new ArgumentException(nameof(value));
+            throw new ArgumentException("UserId cannot be less than 1");
         }
         _value = value;
     }
