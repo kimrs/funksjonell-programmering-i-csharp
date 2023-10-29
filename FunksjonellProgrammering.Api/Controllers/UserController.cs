@@ -20,7 +20,9 @@ public class UserController : ControllerBase
     }
     
     [HttpGet("{id:int}")]
-    public IActionResult Get(UserId id)
+    public IActionResult Get(
+        UserId id
+    )
     {
         var user = _getUser.Get(id);
         return Ok(user);
@@ -32,7 +34,7 @@ public class UserController : ControllerBase
     )
     {
         _createUser.Create(user);
-        return Created("/api/user/", user);
+        return Created("/user/", user);
     }
 }
 
