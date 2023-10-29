@@ -1,4 +1,5 @@
-﻿namespace FunksjonellProgrammering.Api.Primitives;
+﻿
+namespace FunksjonellProgrammering.Api.Primitives;
 
 public class UserId
 {
@@ -9,7 +10,7 @@ public class UserId
 
     private UserId(int value)
     {
-        if (value < 0)
+        if (value <= 0)
         {
             throw new ArgumentException(nameof(value));
         }

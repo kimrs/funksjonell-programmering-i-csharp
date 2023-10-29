@@ -4,7 +4,8 @@ namespace FunksjonellProgrammering.Api.GetUser;
 
 public interface IRepository
 {
-    IEnumerable<Domain> GetAll();
+    IEnumerable<Domain> Get();
+    IEnumerable<Domain> Get(int id);
 }
 
 public class Repository
@@ -12,7 +13,7 @@ public class Repository
 {
     private static readonly SqlTemplate
         _selectSql = """SELECT * FROM Users""",
-        _byIdSql = $"{_selectSql} WHERE Id = @Id";
+        _byIdSql = """SELECT * FROM Users WHERE Id = @Id""";
 
     private readonly ConnectionString _connectionString;
 
@@ -20,12 +21,12 @@ public class Repository
         => _connectionString = configuration.GetConnectionString("ApiDb")
                                ?? throw new ArgumentNullException();
 
-    public IEnumerable<Domain> GetById(UserId id)
+    public IEnumerable<Domain> Get(int id)
         => _connectionString
-            .Retrieve<Dto>(_byIdSql)(id)
+            .Retrieve<Dto>(_byIdSql)(new {Id = id})
             .Select(x => x.ToDomain());
 
-    public IEnumerable<Domain> GetAll()
+    public IEnumerable<Domain> Get()
         => _connectionString
             .Retrieve<Dto>(_selectSql)(null)
             .Select(x => x.ToDomain());

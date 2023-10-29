@@ -20,7 +20,8 @@ public class InitDb
     private readonly ConnectionString _connectionString;
 
     public InitDb(IConfiguration configuration)
-        => _connectionString = configuration.GetConnectionString("ApiDb");
+        => _connectionString = configuration.GetConnectionString("ApiDb")
+                               ?? throw new Exception();
 
     public async Task Init()
     {

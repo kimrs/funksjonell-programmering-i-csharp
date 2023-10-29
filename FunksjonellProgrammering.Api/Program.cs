@@ -1,5 +1,3 @@
-using System.Runtime.CompilerServices;
-using System.Text.Json.Serialization;
 using FunksjonellProgrammering.Api;
 using FunksjonellProgrammering.Api.Primitives;
 
@@ -9,7 +7,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<InitDb>();
 builder.Services.AddSingleton<FunksjonellProgrammering.Api.GetUser.IRepository, FunksjonellProgrammering.Api.GetUser.Repository>();
 builder.Services.AddSingleton<FunksjonellProgrammering.Api.CreateUser.IRepository, FunksjonellProgrammering.Api.CreateUser.Repository>();
-builder.Services.AddControllers().AddJsonOptions(o =>
+builder.Services.AddControllers(o =>
+{
+    o.ModelBinderProviders.Insert(0, new UserIdModelBinderProvider());
+})
+.AddJsonOptions(o =>
 {
     o.JsonSerializerOptions.Converters.Add(new PrimitiveConverter<Role, string>());
     o.JsonSerializerOptions.Converters.Add(new PrimitiveConverter<Name, string>());

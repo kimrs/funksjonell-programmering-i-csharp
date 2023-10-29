@@ -1,3 +1,4 @@
+using FunksjonellProgrammering.Api.Primitives;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FunksjonellProgrammering.Api.Controllers;
@@ -21,11 +22,18 @@ public class UserController : ControllerBase
         _getUser = getUser;
     }
 
-    [HttpGet]
-    public IActionResult GetAll()
+    // [HttpGet]
+    // public IActionResult GetAll()
+    // {
+    //     var users = _getUser.Get();
+    //     return Ok(users);
+    // }
+    
+    [HttpGet("{id}")]
+    public IActionResult Get(UserId id)
     {
-        var users = _getUser.GetAll();
-        return Ok(users);
+        var user = _getUser.Get(id);
+        return Ok(user);
     }
 
     [HttpPost]
@@ -34,7 +42,7 @@ public class UserController : ControllerBase
     )
     {
         _createUser.Create(user);
-        return Ok("User created");
+        return Created("/api/user/", user);
     }
 }
 

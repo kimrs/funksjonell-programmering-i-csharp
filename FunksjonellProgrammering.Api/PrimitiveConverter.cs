@@ -21,7 +21,8 @@ public class PrimitiveConverter<T, R> : JsonConverter<T>
         object parameter = reader.TokenType switch
         {
             JsonTokenType.String => reader.GetString(),
-            JsonTokenType.Number => reader.GetInt64()
+            JsonTokenType.Number => reader.GetInt64(),
+            _ => throw new Exception(),
         };
 
         return (T)_rOperator.Invoke(null, new[] { parameter });
