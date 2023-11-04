@@ -2,6 +2,8 @@ using Dapper;
 using FunksjonellProgrammering.Shared;
 using FunksjonellProgrammering.Shared.Primitives;
 using FunksjonellProgrammering.UserApi;
+using LaYumba.Functional;
+using Microsoft.AspNetCore.Http.HttpResults;
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 SqlMapper.AddTypeHandler(new NameTypeHandler());
@@ -69,6 +71,9 @@ app.MapPost("/user", (User user)
 
 var read = Read.Configure(connectionString);
 app.MapGet("/user/{id:int}", (int id)
-    => Results.Ok(read(id)));
+    => read(id).Match(
+        None: () => Results.NotFound(),
+        Some: Results.Ok
+    ));
 
 app.Run();
