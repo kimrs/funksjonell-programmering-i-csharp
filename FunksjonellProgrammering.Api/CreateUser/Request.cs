@@ -16,3 +16,9 @@ public class Request
     public Name Name { get; }
     public Role Role { get; }
 }
+
+public class R
+{
+    public string Name { get; set; }
+    public string Role { get; set; }
+}

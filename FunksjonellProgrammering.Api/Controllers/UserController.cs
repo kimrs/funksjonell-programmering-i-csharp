@@ -10,21 +10,16 @@ namespace FunksjonellProgrammering.Api.Controllers;
 [Route("[controller]")]
 public class UserController : ControllerBase
 {
-    private static readonly SqlTemplate _createUserSql = """
-        INSERT INTO Users (Name, Role)
-        VALUES (@Name, @Role)
-    """;
-    
-    private readonly Func<CreateUser.Request, IActionResult> _createUser;
-    private readonly GetUser.IRepository _getUser;
+    private readonly Func<CreateUser.Request, int> _create;
+    private readonly GetUser.IRepository _get;
 
     public UserController(
         IConfiguration configuration,
-        GetUser.IRepository getUser
+        GetUser.IRepository get
     )
     {
-         _createUser = CreateHandler.Configure(configuration);
-        _getUser = getUser;
+         _create = CreateHandler.Configure(configuration);
+        _get = get;
     }
     
     [HttpGet("{id:int}")]
@@ -32,12 +27,12 @@ public class UserController : ControllerBase
         UserId id
     )
     {
-        var user = _getUser.Handle(id);
+        var user = _get.Handle(id);
         return Ok(user);
     }
 
     [HttpPost]
     public IActionResult Create(
-        CreateUser.Request user
-    ) => _createUser(user);
+        CreateUser.Request request
+    ) => Created($"/user/{_create(request)}", request);
 }

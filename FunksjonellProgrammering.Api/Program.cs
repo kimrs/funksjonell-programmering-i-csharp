@@ -2,6 +2,7 @@ using Dapper;
 using FunksjonellProgrammering.Api;
 using FunksjonellProgrammering.Api.CreateUser;
 using FunksjonellProgrammering.Api.Primitives;
+using Microsoft.AspNetCore.Http.Json;
 
 SqlMapper.AddTypeHandler(new NameTypeHandler());
 SqlMapper.AddTypeHandler(new RoleTypeHandler());
@@ -12,6 +13,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddSingleton<InitDb>();
 builder.Services.AddSingleton<FunksjonellProgrammering.Api.GetUser.IRepository, FunksjonellProgrammering.Api.GetUser.Repository>();
+builder.Services.Configure<JsonOptions>(options =>
+{
+    options.SerializerOptions.Converters.Add(new PrimitiveConverter<Role, string>());
+    options.SerializerOptions.Converters.Add(new PrimitiveConverter<Name, string>());
+    options.SerializerOptions.Converters.Add(new PrimitiveConverter<UserId, int>());
+});
 // builder.Services.AddSingleton<FunksjonellProgrammering.Api.CreateUser.IRepository, FunksjonellProgrammering.Api.CreateUser.Repository>();
 builder.Services.AddControllers(o =>
 {
@@ -49,7 +56,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// var create = D.ConfigureCreateHandler(app.Configuration);
-// app.MapPost("/user", create);
+var create = CreateHandler.Configure(app.Configuration);
+app.MapPost("/user", (Request request)
+    => Results.Created($"/user/{create(request)}", request));
 
 app.Run();

@@ -14,14 +14,14 @@ public static class CreateHandler
          VALUES (@Name, @Role)
      """;
      
-    public static Func<Request, IActionResult> Configure(
+    public static Func<Request, int> Configure(
         IConfiguration config
     )
     {
         ConnectionString connectionString = config.GetConnectionString("ApiDb");
         var save = connectionString.Save(_createUserSql);
-        
-        return request => new CreatedResult($"/user/{save(request)}", request);
+
+        return request => save(request);
     }
 }
 
