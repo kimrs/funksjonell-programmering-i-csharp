@@ -1,11 +1,13 @@
 using Dapper;
 using FunksjonellProgrammering.Api;
+using FunksjonellProgrammering.Api.CreateUser;
 using FunksjonellProgrammering.Api.Primitives;
 
 SqlMapper.AddTypeHandler(new NameTypeHandler());
 SqlMapper.AddTypeHandler(new RoleTypeHandler());
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 // Add services to the container.
 builder.Services.AddSingleton<InitDb>();
@@ -47,5 +49,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+// var create = D.ConfigureCreateHandler(app.Configuration);
+// app.MapPost("/user", create);
 
 app.Run();

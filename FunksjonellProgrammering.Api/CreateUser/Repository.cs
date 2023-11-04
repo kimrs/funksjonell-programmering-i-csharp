@@ -1,8 +1,29 @@
-﻿using FunksjonellProgrammering.Api.Primitives;
+﻿using System.Runtime.InteropServices.JavaScript;
+using FunksjonellProgrammering.Api.Primitives;
 using LaYumba.Functional;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Unit = System.ValueTuple;
 
 namespace FunksjonellProgrammering.Api.CreateUser;
+
+public static class CreateHandler
+{
+     private static readonly SqlTemplate _createUserSql = """
+         INSERT INTO Users (Name, Role)
+         VALUES (@Name, @Role)
+     """;
+     
+    public static Func<Request, IActionResult> Configure(
+        IConfiguration config
+    )
+    {
+        ConnectionString connectionString = config.GetConnectionString("ApiDb");
+        var save = connectionString.Save(_createUserSql);
+        
+        return request => new CreatedResult($"/user/{save(request)}", request);
+    }
+}
 
 public interface IRepository
 {

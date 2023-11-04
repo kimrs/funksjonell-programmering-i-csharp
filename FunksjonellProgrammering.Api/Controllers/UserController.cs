@@ -1,4 +1,5 @@
 using System.Reactive;
+using FunksjonellProgrammering.Api.CreateUser;
 using FunksjonellProgrammering.Api.Primitives;
 using LaYumba.Functional;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +15,7 @@ public class UserController : ControllerBase
         VALUES (@Name, @Role)
     """;
     
-    private readonly Func<CreateUser.Request, int> _createUser;
+    private readonly Func<CreateUser.Request, IActionResult> _createUser;
     private readonly GetUser.IRepository _getUser;
 
     public UserController(
@@ -22,11 +23,7 @@ public class UserController : ControllerBase
         GetUser.IRepository getUser
     )
     {
-         ConnectionString connectionString = configuration.GetConnectionString("ApiDb")
-                            ?? throw new Exception("Connection string is missing");
-         
-         _createUser = connectionString.Save(_createUserSql);
-    
+         _createUser = CreateHandler.Configure(configuration);
         _getUser = getUser;
     }
     
@@ -42,10 +39,5 @@ public class UserController : ControllerBase
     [HttpPost]
     public IActionResult Create(
         CreateUser.Request user
-    )
-    {
-        var id = _createUser(user);
-        return Created($"/user/{id}", user);
-    }
+    ) => _createUser(user);
 }
-
