@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace FunksjonellProgrammering.Api;
+namespace FunksjonellProgrammering.Shared;
 
 public class PrimitiveConverter<T, R> : JsonConverter<T>
 {

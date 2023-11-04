@@ -1,4 +1,4 @@
-﻿namespace FunksjonellProgrammering.Api.Primitives;
+﻿namespace FunksjonellProgrammering.Shared.Primitives;
 
 public enum RoleEnum
 {

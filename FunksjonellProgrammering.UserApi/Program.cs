@@ -1,8 +1,8 @@
 using Dapper;
-using FunksjonellProgrammering.Api;
-using FunksjonellProgrammering.Api.CreateUser;
-using FunksjonellProgrammering.Api.Primitives;
-using Microsoft.AspNetCore.Http.Json;
+using FunksjonellProgrammering.Shared;
+using FunksjonellProgrammering.Shared.Primitives;
+using FunksjonellProgrammering.UserApi;
+using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 SqlMapper.AddTypeHandler(new NameTypeHandler());
 SqlMapper.AddTypeHandler(new RoleTypeHandler());
@@ -12,14 +12,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddSingleton<InitDb>();
-builder.Services.AddSingleton<FunksjonellProgrammering.Api.GetUser.IRepository, FunksjonellProgrammering.Api.GetUser.Repository>();
+// builder.Services.AddSingleton<FunkFunksjonellProgrammering.UserApiUser.IRepository, FunkFunksjonellProgrammering.UserApiUser.Repository>();
+builder.Services.AddSingleton<ConnectionString>();
 builder.Services.Configure<JsonOptions>(options =>
 {
     options.SerializerOptions.Converters.Add(new PrimitiveConverter<Role, string>());
     options.SerializerOptions.Converters.Add(new PrimitiveConverter<Name, string>());
     options.SerializerOptions.Converters.Add(new PrimitiveConverter<UserId, int>());
 });
-// builder.Services.AddSingleton<FunksjonellProgrammering.Api.CreateUser.IRepository, FunksjonellProgrammering.Api.CreateUser.Repository>();
+
 builder.Services.AddControllers(o =>
 {
     o.ModelBinderProviders.Insert(0, new UserIdModelBinderProvider());
@@ -56,8 +57,18 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-var create = CreateHandler.Configure(app.Configuration);
-app.MapPost("/user", (Request request)
-    => Results.Created($"/user/{create(request)}", request));
+var connectionString = app.Services.GetRequiredService<ConnectionString>();
+
+var create = Create.Configure(connectionString);
+app.MapPost("/user", (User user)
+    => create(user)
+        .Match(
+        exception => Results.Problem(exception.Message),
+        Success:_ => Results.Created($"/user/", user)
+    ));
+
+var read = Read.Configure(connectionString);
+app.MapGet("/user/{id:int}", (int id)
+    => Results.Ok(read(id)));
 
 app.Run();

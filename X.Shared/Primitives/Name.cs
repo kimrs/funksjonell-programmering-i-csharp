@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace FunksjonellProgrammering.Api.Primitives;
+namespace FunksjonellProgrammering.Shared.Primitives;
 
 public partial class Name
 {

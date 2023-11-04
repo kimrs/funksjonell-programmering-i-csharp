@@ -1,8 +1,8 @@
-﻿using FunksjonellProgrammering.Api.Primitives;
+﻿using FunksjonellProgrammering.Shared.Primitives;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 
-namespace FunksjonellProgrammering.Api;
+namespace FunksjonellProgrammering.Shared;
 
 public class UserIdModelBinder : IModelBinder
 {

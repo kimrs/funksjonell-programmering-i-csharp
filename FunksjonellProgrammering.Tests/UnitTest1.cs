@@ -26,9 +26,9 @@ public class Tests
             }
         };
         
-        var createUser = new Request("Tony Stark", "SpaceExplorer");
+        var createUser = new User("Tony Stark", "SpaceExplorer");
         var createdUserSerialized = JsonSerializer.Serialize(createUser, options);
-        var ceatedUSerDeserialized = JsonSerializer.Deserialize<Request>(createdUserSerialized, options);
+        var ceatedUSerDeserialized = JsonSerializer.Deserialize<User>(createdUserSerialized, options);
         
         Assert.Equals(createdUserSerialized, "{\"Name\":\"Tony Stark\",\"Role\":\"SpaceExplorer\"}");
     }

@@ -1,5 +1,5 @@
 ﻿
-namespace FunksjonellProgrammering.Api.Primitives;
+namespace FunksjonellProgrammering.Shared.Primitives;
 
 public class UserId
 {

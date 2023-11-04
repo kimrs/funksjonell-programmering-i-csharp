@@ -1,7 +1,8 @@
 ﻿using System.Net;
 using System.Text.Json;
+using Microsoft.AspNetCore.Http;
 
-namespace FunksjonellProgrammering.Api;
+namespace FunksjonellProgrammering.Shared;
 
 public class ErrorHandlerMiddleware
 {

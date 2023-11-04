@@ -1,9 +1,8 @@
-﻿using System.Data;
-using Dapper;
-using FunksjonellProgrammering.Api.Primitives;
+﻿using Dapper;
+using FunksjonellProgrammering.Shared.Primitives;
 using Microsoft.Data.Sqlite;
 
-namespace FunksjonellProgrammering.Api;
+namespace FunksjonellProgrammering.Shared;
 
 public class InitDb
 {
@@ -19,9 +18,8 @@ public class InitDb
 
     private readonly ConnectionString _connectionString;
 
-    public InitDb(IConfiguration configuration)
-        => _connectionString = configuration.GetConnectionString("ApiDb")
-                               ?? throw new Exception();
+    public InitDb(ConnectionString connectionString)
+        => _connectionString = connectionString;
 
     public async Task Init()
     {
