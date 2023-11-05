@@ -36,10 +36,11 @@ public class UserRepository
             using var connection = new SqliteConnection(_connectionString);
             connection.Open();
 
-            var users = connection.Query(ReadSql, new { Id = Id })
+            int intId = Id;
+            var users = connection.Query(ReadSql, new { Id = intId })
                 .Select(User.Create)
                 .ToList();
-
+            
             return users.Any()
                 ? users.First()
                 : null;
