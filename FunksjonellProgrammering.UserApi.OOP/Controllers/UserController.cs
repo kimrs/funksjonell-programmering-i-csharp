@@ -1,33 +1,36 @@
+using FunksjonellProgrammering.Shared.Primitives;
+using FunksjonellProgrammering.UserApi.OOP.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FunksjonellProgrammering.UserApi.OOP.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class UserController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
+        private readonly IUserRepository _userRepository;
+        public UserController(IUserRepository userRepository)
         {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
-
-        private readonly ILogger<WeatherForecastController> _logger;
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
-        {
-            _logger = logger;
+            _userRepository = userRepository;
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        [HttpGet("/user/{id:int}")]
+        public IActionResult Read(UserId id)
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            var user = _userRepository.Read(id);
+            if (user == null)
             {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+                return NotFound();
+            }
+            
+            return Ok(user);
+        }
+
+        [HttpPost]
+        public IActionResult Create(User user)
+        {
+            _userRepository.Create(user);
+            return Created("/user/", user);
         }
     }
 }
