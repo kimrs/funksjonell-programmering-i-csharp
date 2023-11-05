@@ -1,12 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunksjonellProgrammeringICSharp", "FunksjonellProgrammeringICSharp\FunksjonellProgrammeringICSharp.csproj", "{B70E59E7-6547-479D-AA2F-C0083D6F64E8}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunksjonellProgrammeringICSharp", "FunksjonellProgrammeringICSharp\FunksjonellProgrammeringICSharp.csproj", "{B70E59E7-6547-479D-AA2F-C0083D6F64E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LaYumba.Functional", "functional-csharp-code\LaYumba.Functional\LaYumba.Functional.csproj", "{E5C9FE36-C050-4E25-A26A-0093A5E523CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LaYumba.Functional", "functional-csharp-code\LaYumba.Functional\LaYumba.Functional.csproj", "{E5C9FE36-C050-4E25-A26A-0093A5E523CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunksjonellProgrammering.UserApi", "FunksjonellProgrammering.UserApi\FunksjonellProgrammering.UserApi.csproj", "{751E3791-3A61-45CA-9E9A-4A3E8980311A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunksjonellProgrammering.UserApi", "FunksjonellProgrammering.UserApi\FunksjonellProgrammering.UserApi.csproj", "{751E3791-3A61-45CA-9E9A-4A3E8980311A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "X.Shared", "X.Shared\X.Shared.csproj", "{221EC89C-B0DF-407C-B8A4-69CF101C7650}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "X.Shared", "X.Shared\X.Shared.csproj", "{221EC89C-B0DF-407C-B8A4-69CF101C7650}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunksjonellProgrammering.UserApi.OOP", "FunksjonellProgrammering.UserApi.OOP\FunksjonellProgrammering.UserApi.OOP.csproj", "{83B7749B-3C9B-4E09-BC18-A529B3A5F1C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,5 +35,12 @@ Global
 		{221EC89C-B0DF-407C-B8A4-69CF101C7650}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{221EC89C-B0DF-407C-B8A4-69CF101C7650}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{221EC89C-B0DF-407C-B8A4-69CF101C7650}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83B7749B-3C9B-4E09-BC18-A529B3A5F1C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83B7749B-3C9B-4E09-BC18-A529B3A5F1C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83B7749B-3C9B-4E09-BC18-A529B3A5F1C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83B7749B-3C9B-4E09-BC18-A529B3A5F1C4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
