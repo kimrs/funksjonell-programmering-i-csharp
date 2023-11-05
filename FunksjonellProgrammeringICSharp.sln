@@ -2,11 +2,11 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunksjonellProgrammeringICSharp", "FunksjonellProgrammeringICSharp\FunksjonellProgrammeringICSharp.csproj", "{B70E59E7-6547-479D-AA2F-C0083D6F64E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunksjonellProgrammering.Tests", "FunksjonellProgrammering.Tests\FunksjonellProgrammering.Tests.csproj", "{B0481B2D-065C-4FFA-B52E-DEF36D509762}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LaYumba.Functional", "functional-csharp-code\LaYumba.Functional\LaYumba.Functional.csproj", "{E5C9FE36-C050-4E25-A26A-0093A5E523CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunksjonellProgrammering.Api", "FunksjonellProgrammering.Api\FunksjonellProgrammering.Api.csproj", "{751E3791-3A61-45CA-9E9A-4A3E8980311A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunksjonellProgrammering.UserApi", "FunksjonellProgrammering.UserApi\FunksjonellProgrammering.UserApi.csproj", "{751E3791-3A61-45CA-9E9A-4A3E8980311A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "X.Shared", "X.Shared\X.Shared.csproj", "{221EC89C-B0DF-407C-B8A4-69CF101C7650}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,10 +18,6 @@ Global
 		{B70E59E7-6547-479D-AA2F-C0083D6F64E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B70E59E7-6547-479D-AA2F-C0083D6F64E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B70E59E7-6547-479D-AA2F-C0083D6F64E8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B0481B2D-065C-4FFA-B52E-DEF36D509762}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B0481B2D-065C-4FFA-B52E-DEF36D509762}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B0481B2D-065C-4FFA-B52E-DEF36D509762}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B0481B2D-065C-4FFA-B52E-DEF36D509762}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E5C9FE36-C050-4E25-A26A-0093A5E523CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E5C9FE36-C050-4E25-A26A-0093A5E523CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5C9FE36-C050-4E25-A26A-0093A5E523CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -30,5 +26,9 @@ Global
 		{751E3791-3A61-45CA-9E9A-4A3E8980311A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{751E3791-3A61-45CA-9E9A-4A3E8980311A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{751E3791-3A61-45CA-9E9A-4A3E8980311A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{221EC89C-B0DF-407C-B8A4-69CF101C7650}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{221EC89C-B0DF-407C-B8A4-69CF101C7650}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{221EC89C-B0DF-407C-B8A4-69CF101C7650}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{221EC89C-B0DF-407C-B8A4-69CF101C7650}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

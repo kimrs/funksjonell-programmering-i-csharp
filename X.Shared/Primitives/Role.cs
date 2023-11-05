@@ -1,4 +1,4 @@
-﻿namespace FunksjonellProgrammering.Api.Primitives;
+﻿namespace FunksjonellProgrammering.Shared.Primitives;
 
 public enum RoleEnum
 {
@@ -9,7 +9,7 @@ public enum RoleEnum
 
 public class Role
 {
-    public static implicit operator string(Role r) => r._value.ToString();
+    public static implicit operator string(Role r) => $"{r._value}";
     public static implicit operator Role(string s) => new(s);
     
     private readonly RoleEnum _value;
@@ -18,6 +18,9 @@ public class Role
     {
         _value = RoleEnum.TryParse(s, out RoleEnum value)
             ? value
-            : throw new ArgumentException(nameof(Role));
+            : throw new ArgumentException($"{nameof(Role)} must be known");
     }
+
+    public override string ToString()
+        => $"{_value}";
 }
