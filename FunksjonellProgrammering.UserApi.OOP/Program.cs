@@ -2,7 +2,10 @@ using Dapper;
 using FunksjonellProgrammering.Shared;
 using FunksjonellProgrammering.Shared.Primitives;
 using FunksjonellProgrammering.UserApi.OOP;
-using Microsoft.AspNetCore.Http.Json;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
+
 
 SqlMapper.AddTypeHandler(new NameTypeHandler());
 SqlMapper.AddTypeHandler(new RoleTypeHandler());
@@ -57,5 +60,22 @@ app.UseAuthorization();
 app.MapControllers();
 
 var connectionString = app.Services.GetRequiredService<ConnectionString>();
+var read = Read.Configure(connectionString);
+app.MapGet("/user/{id:int}", (UserId id)
+    => read(id).Match(
+        Exception: _ => Results.Problem(),
+        Success: x => x.Match(
+            None: () => Results.NotFound(),
+            Some: Results.Ok
+)));
+
+var create = Create.Configure(connectionString);
+app.MapPost("/user/", (User user)
+    => create(user)
+        .Match(
+            Exception: _ => Results.Problem(),
+            Success: _ => Results.Created("/user/", user)
+));
+
 
 app.Run();
