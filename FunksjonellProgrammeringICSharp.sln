@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "X.Shared", "X.Shared\X.Shar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunksjonellProgrammering.UserApi.OOP", "FunksjonellProgrammering.UserApi.OOP\FunksjonellProgrammering.UserApi.OOP.csproj", "{83B7749B-3C9B-4E09-BC18-A529B3A5F1C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Examples", "functional-csharp-code\Examples\Examples.csproj", "{9A13187E-653C-4CE0-90B8-E1EE3E1B2509}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
