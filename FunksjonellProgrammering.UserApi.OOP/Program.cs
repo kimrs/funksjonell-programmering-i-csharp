@@ -59,22 +59,4 @@ app.MapControllers();
 
 var connectionString = app.Services.GetRequiredService<ConnectionString>();
 
-// var create = Create.Configure(connectionString);
-// app.MapPost("/user", (User user)
-//     => create(user)
-//         .Match(
-//         exception => Results.Problem(exception.Message),
-//         Success:_ => Results.Created($"/user/", user)
-//     ));
-//
-// var read = Read.Configure(connectionString);
-// app.MapGet("/user/{id:int}", (int id)
-//     => read(id).Match(
-//         Exception: e => Results.Problem(e.Message),
-//         Success: x => x.Match(
-//             None: () => Results.NotFound(),
-//             Some: Results.Ok
-//         )
-//     ));
-
 app.Run();
