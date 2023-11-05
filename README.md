@@ -241,6 +241,77 @@ Mulig jeg bruker eksempelet gradvis.
 
 
 
+# Partial Application
+Eksempel:
+Når en funksjon trenger konfigurasjoner som er tilgjengelige ved oppstart og som ikke endrer seg. 
+
+# Modularisering
+s. 181
+I objektorientert kode, så modulariserer vi applikasjonen vår med å fordele ansvar til forskjellige
+klasser. De ulike ansvarene vi har delegert fanger vi opp med interfaces. 
+Dette er bra fordi det decoupler koden vår slik at vi kan endre et kall fra
+å legge en melding på en kø istedenfor å skrive til databasen uten å 
+for eksempel endre foretningslogikken vår. Det gjør også koden vår
+testbar. Dette følger et mønster vi kaller dependency inversion,
+altså, at høy-nivå komponent ikke konsumerer komponenter fra
+et lavere nivå direkte, men heller gjennom abstraksjoner, aka interfaces.
+Ulempen er at vi ender opp med et stort antall interfacer som øker kompleksiteten
+i koden. For å håndtere denne kompleksiteten, bruker vi IoC containere og mocke rammeverk.
+### Vis eksempel der vi har gjort koden funksjonell men fortsatt bruker dependency injection
+
+Om vi tenker at de fundamentale enhetene i oop er objekter, så er de funksjoner i FP
+Så måten vi modulariserer koden i FP, er å delegere ansvar til metoder, ikke objekter.
+I FP, så definerer vi ikke interfacer, fordi funksjon signaturen gir oss all interface vi trenger.
+
+Så om du skriver kode som må vite hva klokka er, så tar du inn en funksjon som gir deg klokkeslettet
+istedenfor et interface. ### eksempel
+
+
+Etter å ha gjort alt dette, så er det på tide å spørre seg selv, hvorfor trenger vi en kontroller 
+i det hele tatt?
+
+
+## Om applikasjonen
+Vil i utgangspunktet si at teamet som lagde dette apiet har gjort en god jobb.
+De har allerede valgt å separere basert på foretningsprosesser istedenfor
+lagvis med, en mappe for dtoer og en mappe for domeneobjekter osv.
+Om endepunktet mottar noe uforutset, så returnerer vi BadRequest
+og om noe feiler, så returnerer vi InternalServerError og logger detaljene.
+Så ting tyder på at de er opptatt av sikkerhet her. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

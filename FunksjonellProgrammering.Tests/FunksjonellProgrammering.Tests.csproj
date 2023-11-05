@@ -19,6 +19,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\functional-csharp-code\LaYumba.Functional\LaYumba.Functional.csproj" />
+      <ProjectReference Include="..\FunksjonellProgrammering.Api\FunksjonellProgrammering.Api.csproj" />
     </ItemGroup>
 
 </Project>

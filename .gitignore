@@ -1,6 +1,10 @@
 .vscode
+.vs
 .idea
 */bin
 */obj
 *.sln*.user
+*.csproj*.user
 packages
+*.db
+
