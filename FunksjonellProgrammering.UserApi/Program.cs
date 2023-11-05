@@ -72,8 +72,11 @@ app.MapPost("/user", (User user)
 var read = Read.Configure(connectionString);
 app.MapGet("/user/{id:int}", (int id)
     => read(id).Match(
-        None: () => Results.NotFound(),
-        Some: Results.Ok
+        Exception: e => Results.Problem(e.Message),
+        Success: x => x.Match(
+            None: () => Results.NotFound(),
+            Some: Results.Ok
+        )
     ));
 
 app.Run();

@@ -12,24 +12,23 @@ public static class Read
         SELECT * FROM Users WHERE Id = @Id
     """;
 
-    public static Func<int, Option<User>> Configure(
+    public static Func<int, Exceptional<Option<User>>> Configure(
         ConnectionString connectionString
     ) => param =>
     {
         try
         {
-            var r = connectionString.Connect(
-                c => c
-                    .Query(Sql, new {Id = param})
-                    .Select(User.Create)
-                    .First());
-             
-            return Some(r);
-
+            var users = connectionString.Connect(c 
+                => c.Query(Sql, new {Id = param})
+                    .Select(User.Create));
+            
+            return users.Any()
+                ? Some(users.First())
+                : None;
         }
         catch (Exception e)
         {
-            return None;
+            return e;
         }
     };
 }
