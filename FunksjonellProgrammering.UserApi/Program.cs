@@ -64,8 +64,7 @@ var connectionString = app.Services.GetRequiredService<ConnectionString>();
 
 var create = Create.Configure(connectionString);
 app.MapPost("/user", (User user)
-    => create(user)
-        .Match(
+    => create(user).Match(
         Exception: _ => Results.Problem(),
         Success: _ => Results.Created($"/user/", user)
     ));

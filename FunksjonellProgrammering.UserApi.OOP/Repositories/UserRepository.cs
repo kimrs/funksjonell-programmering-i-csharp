@@ -2,13 +2,15 @@
 using FunksjonellProgrammering.Shared.Primitives;
 using LaYumba.Functional;
 using Microsoft.Data.Sqlite;
+using Unit = System.ValueTuple;
+using static LaYumba.Functional.F;
 
 namespace FunksjonellProgrammering.UserApi.OOP.Repositories;
 
 public interface IUserRepository
 {
-    Option<User> Read(UserId Id);
-    void Create(User Id);
+    Exceptional<Option<User>> Read(UserId Id);
+    Exceptional<Unit> Create(User Id);
 }
 
 public class UserRepository
@@ -30,7 +32,7 @@ public class UserRepository
         _connectionString = connectionString;
     }
 
-    public Option<User> Read(UserId Id)
+    public Exceptional<Option<User>> Read(UserId Id)
     {
         try
         {
@@ -38,21 +40,21 @@ public class UserRepository
             connection.Open();
 
             int intId = Id;
-            var users = connection.Query(ReadSql, new { Id = intId })
-                .Select(User.Create)
-                .ToList();
-            
+            var users = connection
+                .Query(ReadSql, new { Id = intId })
+                .Select(User.Create);
+
             return users.Any()
-                ? users.First()
-                : null;
+                ? Some(users.First())
+                : None;
         }
         catch (Exception e)
         {
-            throw;
+            return e;
         }
     }
 
-    public void Create(User user)
+    public Exceptional<Unit> Create(User user)
     {
         try
         {
@@ -63,7 +65,9 @@ public class UserRepository
         }
         catch (Exception e)
         {
-            throw;
+            return e;
         }
+
+        return Unit();
     }
 }

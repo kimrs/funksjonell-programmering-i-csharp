@@ -18,16 +18,19 @@ namespace FunksjonellProgrammering.UserApi.OOP.Controllers
         [HttpGet("{id:int}")]
         public IActionResult Read(UserId id)
             => _userRepository.Read(id)
-                .Match<IActionResult>(
-                    None: NotFound,
-                    Some: Ok
-                );
+                .Match(
+                    Exception: _ => Ok(),
+                    Success: x => x.Match<IActionResult>(
+                        None: NotFound,
+                        Some: Ok
+            ));
 
         [HttpPost]
         public IActionResult Create(User user)
-        {
-            _userRepository.Create(user);
-            return Created("/user/", user);
-        }
+            => _userRepository.Create(user)
+                .Match(
+                    Exception: _ => Problem(),
+                    Success: _ => Created("/user/", user)
+                );
     }
 }

@@ -155,8 +155,107 @@ og om noe feiler, så returnerer vi InternalServerError og logger detaljene.
 Så ting tyder på at de er opptatt av sikkerhet her. 
 
 
+Steg 1 Option
+* Todo: Litt generelt om Option
+Jeg pratet om Option på Opkoko 23.1 i Berlin. Da foreslo jeg en ganske enkel implementasjon.
+Det var ikke feil, dette er bare konsepter, man står fritt til å bruke dem som man vil.
+Denne gangen vil jeg bruke biblioteket som er skrevet av forfatteren. Den er litt mer
+kompleks.
+
+* TODO: Litt generelt om Match
+Match tar inn to funcs som parametre, den ene eksekverer om Option er None, den andre for 
+når Option er Some.
+Når en funskjon returnerer Option, så bruker vi Match for å bestemme vha som skal skje 
+i de forskjellige utfallene.
 
 
+```Csharp
+[HttpGet("{id:int}")]
+public IActionResult Read(UserId id)
+    => _userRepository.Read(id)
+        .Match<IActionResult>(
+            None: NotFound,
+            Some: Ok
+        );
+```
+
+* TODO: Litt om Exceptional
+
+```Csharp
+public Exceptional<Option<User>> Read(UserId Id)
+{
+    try
+    {
+        using var connection = new SqliteConnection(_connectionString);
+        connection.Open();
+
+        int intId = Id;
+        var users = connection
+            .Query(ReadSql, new { Id = intId })
+            .Select(User.Create);
+        return users.Any()
+            ? Some(users.First())
+            : None;
+    }
+    catch (Exception e)
+    {
+        return e;
+    }
+}
+```
+
+```Csharp
+public Exceptional<Option<User>> Read(UserId Id)
+{
+    try
+    {
+        using var connection = new SqliteConnection(_connectionString);
+        connection.Open();
+
+        int intId = Id;
+        var users = connection
+            .Query(ReadSql, new { Id = intId })
+            .Select(User.Create);
+
+        return users.Any()
+            ? Some(users.First())
+            : None;
+    }
+    catch (Exception e)
+    {
+        return e;
+    }
+}
+```
+
+Kan vi gjøre dette med create-metoden? Klart vi kan. Akkurat nå så
+er metoden en void. Det fungerer ikke i den funksjonelle 
+verdenen. Så vi endrer den til en Unit.
+Den har ikke en returverdi, men siden operasjonen kan feile,
+så gjør vi denne også om til en exceptional.
+* TODO Litt generelt om Unit
+
+
+
+
+```Csharp
+public Exceptional<Unit> Create(User user)
+{
+    try
+    {
+        using var connection = new SqliteConnection(_connectionString);
+        connection.Open();
+
+        connection.Execute(CreateSql, user);
+    }
+    catch (Exception e)
+    {
+        return e;
+    }
+
+    return Unit();
+}
+```
 
 
 
