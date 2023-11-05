@@ -6,4 +6,5 @@
 *.sln*.user
 *.csproj*.user
 packages
+*.db
 
