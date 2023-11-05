@@ -1,3 +1,7 @@
+global using LaYumba.Functional;
+global using Unit = System.ValueTuple;
+global using static LaYumba.Functional.F;
+
 using Dapper;
 using FunksjonellProgrammering.Shared;
 using FunksjonellProgrammering.Shared.Primitives;

@@ -2,9 +2,6 @@ using Dapper;
 using FunksjonellProgrammering.Shared;
 using FunksjonellProgrammering.Shared.Primitives;
 using FunksjonellProgrammering.UserApi;
-using LaYumba.Functional;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 SqlMapper.AddTypeHandler(new NameTypeHandler());

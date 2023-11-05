@@ -1,8 +1,5 @@
 ﻿using Dapper;
 using FunksjonellProgrammering.Shared.Primitives;
-using LaYumba.Functional;
-using Unit = System.ValueTuple;
-using static LaYumba.Functional.F;
 
 namespace FunksjonellProgrammering.UserApi;
 

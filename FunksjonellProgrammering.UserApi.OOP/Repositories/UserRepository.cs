@@ -1,13 +1,12 @@
 ﻿using Dapper;
 using FunksjonellProgrammering.Shared.Primitives;
-using LaYumba.Functional;
 using Microsoft.Data.Sqlite;
 
 namespace FunksjonellProgrammering.UserApi.OOP.Repositories;
 
 public interface IUserRepository
 {
-    Option<User> Read(UserId Id);
+    User Read(UserId Id);
     void Create(User Id);
 }
 
@@ -30,7 +29,7 @@ public class UserRepository
         _connectionString = connectionString;
     }
 
-    public Option<User> Read(UserId Id)
+    public User Read(UserId Id)
     {
         try
         {
