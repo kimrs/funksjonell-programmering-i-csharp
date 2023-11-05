@@ -236,8 +236,6 @@ så gjør vi denne også om til en exceptional.
 * TODO Litt generelt om Unit
 
 
-
-
 ```Csharp
 public Exceptional<Unit> Create(User user)
 {
@@ -257,9 +255,27 @@ public Exceptional<Unit> Create(User user)
 }
 ```
 
+```Csharp
+[HttpPost]
+public IActionResult Create(User user)
+    => _userRepository.Create(user)
+        .Match(
+            Exception: _ => Problem(),
+            Success: _ => Created("/user/", user)
+        );
+```
 
+## Steg 2
+Det neste trikset jeg skal vise dere, er partial application. Et problem er at diverse data er tilgjengelig på forskjellige tidspunkter
+i livssyklusen. For eksempel, sett bort i fra id feltet her, så vet vi hvordan SQL spørringa vil se ut allerede i det vi starter apiet.
+Så vi kan fint ta hånd om det allerede i det vi starter apiet.
 
+## Steg 3
+Føltes ikke det godt da. Vi har fjernet repository laget. Det er sikkert noen av dere som nå lurer på om det egentlig er behov for 
+controlleren. Jeg har i så fall gledelige nyheter til dere. Vi trenger den så  absolutt ikke. 
 
+Note. Bruker .NET 7. Minimal-api støtter ikke egendefinert model-binding. Har derimot hørt rykter om at det skal finnes en løsning for det i
+.NET 8, men jeg har ikke rukket å teste det ut enda. 
 
 
 

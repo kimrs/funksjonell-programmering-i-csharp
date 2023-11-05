@@ -1,36 +1,43 @@
 using FunksjonellProgrammering.Shared.Primitives;
-using FunksjonellProgrammering.UserApi.OOP.Repositories;
+using LaYumba.Functional;
 using LaYumba.Functional.Option;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Unit = System.ValueTuple;
+using static LaYumba.Functional.F;
 
-namespace FunksjonellProgrammering.UserApi.OOP.Controllers
+namespace FunksjonellProgrammering.UserApi.OOP.Controllers;
+
+[ApiController]
+[Route("[controller]")]
+public class UserController : ControllerBase
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class UserController : ControllerBase
+    private readonly Func<UserId, Exceptional<Option<User>>> _read;
+    private readonly Func<User, Exceptional<Unit>> _create;
+    
+    public UserController(
+        ConnectionString connectionString
+    )
     {
-        private readonly IUserRepository _userRepository;
-        public UserController(IUserRepository userRepository)
-        {
-            _userRepository = userRepository;
-        }
-
-        [HttpGet("{id:int}")]
-        public IActionResult Read(UserId id)
-            => _userRepository.Read(id)
-                .Match(
-                    Exception: _ => Ok(),
-                    Success: x => x.Match<IActionResult>(
-                        None: NotFound,
-                        Some: Ok
-            ));
-
-        [HttpPost]
-        public IActionResult Create(User user)
-            => _userRepository.Create(user)
-                .Match(
-                    Exception: _ => Problem(),
-                    Success: _ => Created("/user/", user)
-                );
+        _read = Read.Configure(connectionString);
+        _create = Create.Configure(connectionString);
     }
+
+    [HttpGet("{id:int}")]
+    public IActionResult Read_(UserId id)
+        => _read(id)
+            .Match(
+                Exception: _ => Ok(),
+                Success: x => x.Match<IActionResult>(
+                    None: NotFound,
+                    Some: Ok
+        ));
+
+    [HttpPost]
+    public IActionResult Create_(User user)
+        => _create(user)
+            .Match(
+                Exception: _ => Problem(),
+                Success: _ => Created("/user/", user)
+            );
 }

@@ -1,7 +1,7 @@
 using Dapper;
 using FunksjonellProgrammering.Shared;
 using FunksjonellProgrammering.Shared.Primitives;
-using FunksjonellProgrammering.UserApi.OOP.Repositories;
+using FunksjonellProgrammering.UserApi.OOP;
 using Microsoft.AspNetCore.Http.Json;
 
 SqlMapper.AddTypeHandler(new NameTypeHandler());
@@ -12,7 +12,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddSingleton<InitDb>();
-builder.Services.AddSingleton<IUserRepository, UserRepository>();
 builder.Services.AddSingleton<ConnectionString>();
 builder.Services.Configure<JsonOptions>(options =>
 {
