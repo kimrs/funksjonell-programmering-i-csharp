@@ -1,5 +1,6 @@
 using FunksjonellProgrammering.Shared.Primitives;
 using FunksjonellProgrammering.UserApi.OOP.Repositories;
+using LaYumba.Functional.Option;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FunksjonellProgrammering.UserApi.OOP.Controllers
@@ -14,17 +15,13 @@ namespace FunksjonellProgrammering.UserApi.OOP.Controllers
             _userRepository = userRepository;
         }
 
-        [HttpGet("/user/{id:int}")]
+        [HttpGet("{id:int}")]
         public IActionResult Read(UserId id)
-        {
-            var user = _userRepository.Read(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            
-            return Ok(user);
-        }
+            => _userRepository.Read(id)
+                .Match<IActionResult>(
+                    None: NotFound,
+                    Some: Ok
+                );
 
         [HttpPost]
         public IActionResult Create(User user)
