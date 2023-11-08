@@ -1,21 +1,6 @@
 # funksjonell-programmering-i-csharp
 A presentation that I will do at OPKOKO 23.2 Tyrifjord og P2P OPK1D Katrineholm
 
-
-# Cloning the repo
-Repo has a submodule either use the `--recurse-submodules` flag
-
-```shell
-git clone --recurse-submodules git@github.com:kimrs/functional-programming-in-csharp.git
-```
-
-Or, if you forgot to use the flag
-
-```shell
-git submodule init
-git submodule update
-```
-
 ## Roadmap
 
 What they | Before | After
@@ -125,119 +110,9 @@ I mattematikken, så er funksjon en mapping mellom to set. Domenet og codomenet.
 
 #Core Techniques
 ##Option
-I C#, så er det implementasjonsdetaljer som bestemmer hvorvidt null returneres eller en exception kastes.
-Dette har gjort bibliotekene våre inkonsekvente.
-
-```csharp
-using System.Collections.Specialized;
-using static System.Console;
-
-try
-{
-    _ = new NameValueCollection()["green"];
-    WriteLine("green!");
-
-    _ = new Dictionary<string, string>()["blue"];
-    WriteLine("blue!");
-}
-catch (Exception ex)
-{
-    WriteLine(ex.GetType().Name);
-}
-/*
-    green!
-    KeyNotFoundException
-*/
-```
-I funksjonell programmering bruker man ikke null. Man kaster heller ikke ekseption.
-Mangelen på null og exception tvinger oss til å være mer konsekvente i måten vi 
-tilfeller der ugyldige argumenter
-Så hva bruker vi isteden?
-Option<T>
-Option er en wrapper som kan være None | Some(T). I C# kan vi enkelt håndtere None og Some
-caset med en switch expression
-
-```csharp
-string Greet(Option<string> greetee)
-    => greetee switch
-    {
-        None => "Sorry, who?",
-        Some(name) => $"Hello, {name}"
-    };
-```
-
-Desverre så lurte jeg dere. Dette vil ikke kompilere, vi må skrive det på en langt styggere måte
-
-```csharp
-string Greet(Option<string> greetee)
-    => greetee switch
-    {
-        None<string> => "Sorry, who?",
-        Some<string>(var name) => $"Hello, {name}"
-        _ => throw new ArgumentException("Option must be None or Some")
-    };
-```
-
-Så istedenfor så kan vi skjule det stygge i en Match funksjon
-
-```csharp
-static R Match<T, R> (this Option<T> opt, Func<R> None, Func<T, R> Some)
-    => opt switch
-    {
-        None<T> => None(),
-        Some<T>(var t) => Some(t),
-        _ => throw new ArgumentException("Option must be None or Some")
-    };
-```
-
-Greet funksjonen vår ser da slik ut. Strengt talt så er det ikke nødvendig å skrive None eller Some
-Det er ryddig i denne presentasjonen
-
-```csharp
-string Greet(Option<string> greetee)
-    => greetee.Match
-    (
-        None: () => "Sorry, who?",
-        Some: (name) => $"Hello, {name}"
-    );
-```
-
-TODO: Smart constructor pattern med Domain Primitives
-TODO: Everything is a stream. Se på IOption som en spesiell type
-liste som enten kan ha en verdi eller ingen. Da vil 
-
-# Map
-Map i funksjonell programmering er det samme som Select.
-```csharp
-public static IEnumerable<R> Map<T, R>(
-  this IEnumerable<T> ts, Func<T, R> f
-) => ts.Select(f);
-```
-Den brukes til å kalle en funksjon på den indre verdien i en datastruktur som for eksempel IEnumerable.
-Som jeg nevnte, så kan vi se på en Option som ei liste. Det betyr at `Map` også fungerer på
-Option. I det tilfellet vil 'f' kalles på ts kun hvis option er en Some.
-Dette er likt det som skjer hvis ts er en tom liste. Select vil i det tilfellet returnere en tom liste
-
-## Functor
-Det vi kaller typer som har en Map funksjon definert for seg
-
-# Bind
-Gjør det samme som map, men fungerer på funksjoner som returnerer Option.
-## Unngå stacking
-## Monad 
-Typer som har en Bind funksjon definert for seg
-
-## Regular vs elevated? s.111
-
-# Either
-
-# Eksempel
-Mulig jeg bruker eksempelet gradvis.
-
-
-
-
-
+I funksjonell programmering bruker man ikke null.
+Man bruker Option isteden. 
+Kodesnutt s.76
 
 
 
@@ -280,12 +155,127 @@ og om noe feiler, så returnerer vi InternalServerError og logger detaljene.
 Så ting tyder på at de er opptatt av sikkerhet her. 
 
 
+Steg 1 Option
+* Todo: Litt generelt om Option
+Jeg pratet om Option på Opkoko 23.1 i Berlin. Da foreslo jeg en ganske enkel implementasjon.
+Det var ikke feil, dette er bare konsepter, man står fritt til å bruke dem som man vil.
+Denne gangen vil jeg bruke biblioteket som er skrevet av forfatteren. Den er litt mer
+kompleks.
+
+* TODO: Litt generelt om Match
+Match tar inn to funcs som parametre, den ene eksekverer om Option er None, den andre for 
+når Option er Some.
+Når en funskjon returnerer Option, så bruker vi Match for å bestemme vha som skal skje 
+i de forskjellige utfallene.
 
 
+```Csharp
+[HttpGet("{id:int}")]
+public IActionResult Read(UserId id)
+    => _userRepository.Read(id)
+        .Match<IActionResult>(
+            None: NotFound,
+            Some: Ok
+        );
+```
+
+* TODO: Litt om Exceptional
+
+```Csharp
+public Exceptional<Option<User>> Read(UserId Id)
+{
+    try
+    {
+        using var connection = new SqliteConnection(_connectionString);
+        connection.Open();
+
+        int intId = Id;
+        var users = connection
+            .Query(ReadSql, new { Id = intId })
+            .Select(User.Create);
+        return users.Any()
+            ? Some(users.First())
+            : None;
+    }
+    catch (Exception e)
+    {
+        return e;
+    }
+}
+```
+
+```Csharp
+public Exceptional<Option<User>> Read(UserId Id)
+{
+    try
+    {
+        using var connection = new SqliteConnection(_connectionString);
+        connection.Open();
+
+        int intId = Id;
+        var users = connection
+            .Query(ReadSql, new { Id = intId })
+            .Select(User.Create);
+
+        return users.Any()
+            ? Some(users.First())
+            : None;
+    }
+    catch (Exception e)
+    {
+        return e;
+    }
+}
+```
+
+Kan vi gjøre dette med create-metoden? Klart vi kan. Akkurat nå så
+er metoden en void. Det fungerer ikke i den funksjonelle 
+verdenen. Så vi endrer den til en Unit.
+Den har ikke en returverdi, men siden operasjonen kan feile,
+så gjør vi denne også om til en exceptional.
+* TODO Litt generelt om Unit
 
 
+```Csharp
+public Exceptional<Unit> Create(User user)
+{
+    try
+    {
+        using var connection = new SqliteConnection(_connectionString);
+        connection.Open();
 
+        connection.Execute(CreateSql, user);
+    }
+    catch (Exception e)
+    {
+        return e;
+    }
 
+    return Unit();
+}
+```
+
+```Csharp
+[HttpPost]
+public IActionResult Create(User user)
+    => _userRepository.Create(user)
+        .Match(
+            Exception: _ => Problem(),
+            Success: _ => Created("/user/", user)
+        );
+```
+
+## Steg 2
+Det neste trikset jeg skal vise dere, er partial application. Et problem er at diverse data er tilgjengelig på forskjellige tidspunkter
+i livssyklusen. For eksempel, sett bort i fra id feltet her, så vet vi hvordan SQL spørringa vil se ut allerede i det vi starter apiet.
+Så vi kan fint ta hånd om det allerede i det vi starter apiet.
+
+## Steg 3
+Føltes ikke det godt da. Vi har fjernet repository laget. Det er sikkert noen av dere som nå lurer på om det egentlig er behov for 
+controlleren. Jeg har i så fall gledelige nyheter til dere. Vi trenger den så  absolutt ikke. 
+
+Note. Bruker .NET 7. Minimal-api støtter ikke egendefinert model-binding. Har derimot hørt rykter om at det skal finnes en løsning for det i
+.NET 8, men jeg har ikke rukket å teste det ut enda. 
 
 
 
