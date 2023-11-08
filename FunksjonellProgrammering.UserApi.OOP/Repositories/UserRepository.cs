@@ -33,11 +33,8 @@ public class UserRepository
     {
         try
         {
-            using var connection = new SqliteConnection(_connectionString);
-            connection.Open();
-
             int intId = Id;
-            var users = _connectionString.Connect(c => connection.Query(ReadSql, new { Id = intId })
+            var users = _connectionString.Connect(c => c.Query(ReadSql, new { Id = intId })
                 .Select(User.Create)
                 .ToList());
             
@@ -55,11 +52,7 @@ public class UserRepository
     {
         try
         {
-            // _connectionString.Connect(connection.Execute(CreateSql, user));
-            
-            using var connection = new SqliteConnection(_connectionString);
-            connection.Open();
-            connection.Execute(CreateSql, user);
+            _connectionString.Connect(c => c.Execute(CreateSql, user));
         }
         catch (Exception e)
         {
