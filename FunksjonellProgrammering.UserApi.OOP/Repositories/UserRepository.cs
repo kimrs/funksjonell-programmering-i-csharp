@@ -37,9 +37,9 @@ public class UserRepository
             connection.Open();
 
             int intId = Id;
-            var users = connection.Query(ReadSql, new { Id = intId })
+            var users = _connectionString.Connect(c => connection.Query(ReadSql, new { Id = intId })
                 .Select(User.Create)
-                .ToList();
+                .ToList());
             
             return users.Any()
                 ? users.First()
@@ -55,9 +55,10 @@ public class UserRepository
     {
         try
         {
+            // _connectionString.Connect(connection.Execute(CreateSql, user));
+            
             using var connection = new SqliteConnection(_connectionString);
             connection.Open();
-
             connection.Execute(CreateSql, user);
         }
         catch (Exception e)
