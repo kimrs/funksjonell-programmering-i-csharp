@@ -13,13 +13,13 @@ public static class Read
         SELECT * FROM Users WHERE Id = @Id
     """;
 
-    public static Func<UserId, Exceptional<Option<User>>> Configure(
+    public static Func<int, Exceptional<Option<User>>> Configure(
         ConnectionString connectionString
     ) => id =>
     {
         return connectionString.Connect(c => c
-            .Query(Sql, new { Id = (int)id })
-            .Select(User.Create)
+            .Query(Sql, new { Id = id })
+            .Select(x => new User(x.Name, x.Role))
             .Match<User, Option<User>>(
                 Empty: () => None,
                 Otherwise: (user, _) => user)

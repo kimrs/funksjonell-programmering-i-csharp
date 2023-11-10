@@ -35,7 +35,7 @@ public class UserRepository
         {
             int intId = Id;
             var users = _connectionString.Connect(c => c.Query(ReadSql, new { Id = intId })
-                .Select(User.Create)
+                .Select(x => new User(x.Name, x.Role))
                 .ToList());
             
             return users.Any()
