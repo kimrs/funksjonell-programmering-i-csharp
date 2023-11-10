@@ -13,23 +13,16 @@ public static class Read
         SELECT * FROM Users WHERE Id = @Id
     """;
 
-    public static Func<int, Exceptional<Option<User>>> Configure(
+    public static Func<UserId, Exceptional<Option<User>>> Configure(
         ConnectionString connectionString
-    ) => param =>
+    ) => id =>
     {
-        try
-        {
-            var users = connectionString.Connect(c 
-                => c.Query(Sql, new {Id = param})
-                    .Select(User.Create));
-            
-            return users.Any()
-                ? Some(users.First())
-                : None;
-        }
-        catch (Exception e)
-        {
-            return e;
-        }
+        return connectionString.Connect(c => c
+            .Query(Sql, new { Id = (int)id })
+            .Select(User.Create)
+            .Match<User, Option<User>>(
+                Empty: () => None,
+                Otherwise: (user, _) => user)
+        );
     };
 }
