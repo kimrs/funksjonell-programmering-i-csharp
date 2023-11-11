@@ -29,18 +29,14 @@ public class UserRepository
         _connectionString = connectionString;
     }
 
-    public User Read(UserId Id)
+    public User Read(UserId id)
     {
         try
         {
-            int intId = Id;
-            var users = _connectionString.Connect(c => c.Query(ReadSql, new { Id = intId })
+            return _connectionString.Connect(c => c.Query(ReadSql, new { Id = (int) id })
                 .Select(x => new User(x.Name, x.Role))
-                .ToList());
-            
-            return users.Any()
-                ? users.First()
-                : null;
+                .SingleOrDefault()
+            );
         }
         catch (Exception e)
         {
@@ -53,6 +49,7 @@ public class UserRepository
         try
         {
             _connectionString.Connect(c => c.Execute(CreateSql, user));
+            throw new Exception("huff da");
         }
         catch (Exception e)
         {

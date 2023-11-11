@@ -18,12 +18,10 @@ public class UserController : ControllerBase
     public IActionResult Read(UserId id)
     {
         var user = _userRepository.Read(id);
-        if (user == null)
-        {
-            return NotFound();
-        }
 
-        return Ok(user);
+        return user == null
+            ? NotFound()
+            : Ok(user);
     }
 
     [HttpPost]

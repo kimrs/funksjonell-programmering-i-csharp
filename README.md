@@ -147,20 +147,55 @@ i det hele tatt?
 
 
 ## Om applikasjonen
+Caset vi skal jobbe med er et tradisjonelt crud api. Apiet er utviklet med en typisk lagvis arkitektur der
+databaseoperasjonene er i repository laget og endepuntkene er definert i controller laget.
+I Controlleren ser vi at vi bare har to endepunkter, Read og Create, så Update og Delete mangler.
+Read metoden tar imot en userid som blir sent til UserRepository. Vi kunne ha brukt en int som id her,
+men vi har valgt å bruke et Value Object som imput parameter. Er det noen var dere som syns dette er ugreit?
+Ikke? Good!
+
+Om vi tar en titt videre i Read metoden til repository.
+Så har vi en connection string som vi henter med dependency injection. Den har en
+Connect metode som tar inn en spørring. Vi ser SQL spørringeng lengre opp, og vi
+bruker id som parameter. Så bruker vi constructoren til domeneobjektet for å lage en
+instans. Til slutt her så returnerer vi SingleOrDefault. Det vil si at
+* Om det eksisterer EN bruker med denne id-en, så returnerer vi den
+* Om det eksisterer FLERE brukere med denne id-en, så kaster vi ekseption
+* Om dei ikke eksisterer noen brukere med denne IDen, så returnerer vi null
+
+Tilbake i controlleren, så ser vi at vi returnerer NotFound om user er null og Ok om den ikke er null.
+
+Den neste operasjonen er Create. Her tar vi i mot en DTO eller domeneobjekt eller hva enn du vil kalle det som 
+representerer en bruker. Jeg har ikke tatt meg bryderiet med å skille domeneobjekt fra dto, det er ikke
+alltid jeg ser poenget med å gjøre det. User klassen er en record med to properties.
+Name og Role. Det dere pleier å bli krenket av er at jeg putter Value Objects i dtoen min. 
+Jeg hører mange si at man skal holde seg til c# datatyper i dtoer og konvertere det til
+domeneobjekt ved mottak. Så jeg lurer på, er det mange her inne som syns at jeg ikke skal
+bruke Value Objects i DTOer? Rekk opp handa!
+Ser at det er noen her. Kan jeg få en grunn til at du mener det?
+Den som pleier å bli mest krenket her er jo Stenland, men han holder foredraget sitt i nabo rommet akkurat nå.
+Så det ser ikke ut til at jeg trenger å forsvare avgjørelsene mine her. Det er bra.
+
+Videre sender vi User til userRepository, hvor vi har en ganske enkel operasjon for å lagre objektet.
+Det samme objektet som vi mottok i contolleren blir lagret. ID feltet blir bestemt av databasen.
+I controlleren så returnerer Created.
+
 Vil i utgangspunktet si at teamet som lagde dette apiet har gjort en god jobb.
-De har allerede valgt å separere basert på foretningsprosesser istedenfor
-lagvis med, en mappe for dtoer og en mappe for domeneobjekter osv.
-Om endepunktet mottar noe uforutset, så returnerer vi BadRequest
-og om noe feiler, så returnerer vi InternalServerError og logger detaljene.
-Så ting tyder på at de er opptatt av sikkerhet her. 
+Om en exception blir kastet, så returnerer vi 500 feil uten feilmeldinga,
+fordi at å eksponere seg selv for omverdenen på den måten er vulgært.
+Også har bruken av value objects og valget om å ha dem i dtoen sørget for at 
+valideringen er på plass uten at vi trenger å tenke på det.
 
 
-Steg 1 Option
+
+## Steg 1 Option
 * Todo: Litt generelt om Option
-Jeg pratet om Option på Opkoko 23.1 i Berlin. Da foreslo jeg en ganske enkel implementasjon.
-Det var ikke feil, dette er bare konsepter, man står fritt til å bruke dem som man vil.
+
+Jeg pratet om Option tidligere i år på Opkoko 23.1 i Berlin. Da foreslo jeg en ganske enkel implementasjon
+Med et interface og to implementasjoner, en for Some og en for None. None hadde 
+også et felt som froklarte oss hva som gikk galt. Det var ikke feil, dette er bare konsepter, man står fritt til å bruke dem som man vil.
 Denne gangen vil jeg bruke biblioteket som er skrevet av forfatteren. Den er litt mer
-kompleks.
+kompleks. 
 
 * TODO: Litt generelt om Match
 Match tar inn to funcs som parametre, den ene eksekverer om Option er None, den andre for 
