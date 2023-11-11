@@ -49,7 +49,6 @@ public class UserRepository
         try
         {
             _connectionString.Connect(c => c.Execute(CreateSql, user));
-            throw new Exception("huff da");
         }
         catch (Exception e)
         {

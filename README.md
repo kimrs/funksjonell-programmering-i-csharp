@@ -110,9 +110,6 @@ I mattematikken, så er funksjon en mapping mellom to set. Domenet og codomenet.
 
 #Core Techniques
 ##Option
-I funksjonell programmering bruker man ikke null.
-Man bruker Option isteden. 
-Kodesnutt s.76
 
 
 
@@ -186,131 +183,138 @@ fordi at å eksponere seg selv for omverdenen på den måten er vulgært.
 Også har bruken av value objects og valget om å ha dem i dtoen sørget for at 
 valideringen er på plass uten at vi trenger å tenke på det.
 
+Det vi nå skal se på er hvordan applikasjonen vil se ut om vi introduseser noen 
+funksjonelle konsepter. Først ut er null/feil håndteringa.
 
+## Steg 1 Core Functions
+I funksjonell programmering bruker man ikke null eller ekseptions.
+Det er gode grunner til det. Blandt annet motarbeider det oss
+når vi ønkser å væare konsekvente. Ta en titt på denne kodesnutten.
+Hva blir skevet til konsollen? Noen her som tør å prøve seg?
 
-## Steg 1 Option
-* Todo: Litt generelt om Option
+Ser ikke mange som rekker opp handa her. Ikke mange som har ballene til å
+fortelle oss hva som blir skrevet til konsollen. Men poenget mitt er at 
+slikt burde ikke kreve baller.
+
+Fasit: NameValueCollection returnerer null når den ikke inneholder verdien.
+Dictionary kaster KeyNotFoundException.
+
+I funksjonell programmering så bruker man Option isteden. Option
+er en beholder som pakker inn en verdi, eller som ikke inneholder noen verdi.
+Se på det som en liste med plass til kun en verdi.
 
 Jeg pratet om Option tidligere i år på Opkoko 23.1 i Berlin. Da foreslo jeg en ganske enkel implementasjon
 Med et interface og to implementasjoner, en for Some og en for None. None hadde 
-også et felt som froklarte oss hva som gikk galt. Det var ikke feil, dette er bare konsepter, man står fritt til å bruke dem som man vil.
+også et felt som beskrev hva som gikk galt. Det var ikke feil, dette er bare konsepter, man står fritt til å bruke dem som man vil.
 Denne gangen vil jeg bruke biblioteket som er skrevet av forfatteren. Den er litt mer
-kompleks. 
+kompleks.
 
-* TODO: Litt generelt om Match
-Match tar inn to funcs som parametre, den ene eksekverer om Option er None, den andre for 
-når Option er Some.
-Når en funskjon returnerer Option, så bruker vi Match for å bestemme vha som skal skje 
-i de forskjellige utfallene.
+TODO: Ta akkurat de bitene vi blir å bruke.
 
+DO: Endre repository til å returnere Option
 
-```Csharp
-[HttpGet("{id:int}")]
-public IActionResult Read(UserId id)
-    => _userRepository.Read(id)
-        .Match<IActionResult>(
-            None: NotFound,
-            Some: Ok
-        );
-```
+Som nevnt tidligere så er jeg ikke spesielt fan av if-else. I funksjonell programmering,
+så bruker man pattern matching for slikt. Desverre så lar ikke pattern-matching
+oss skille mellom hva vi skal gjøre om lista er tom elle ikke. Så det vi 
+istedenfor har, er funksjonen Match. Den fungerer på alle former for 
+samlinger og tar inn en funksjon som eksekveres om lista er tom,
+og en som eksekveres om lista inneholder noe. 
+Otherwise parameteren bruker to parametere. Det er første
+element i lista og resten av lista, men den discarder vi bare.
 
-* TODO: Litt om Exceptional
+Do: Match i repository
 
-```Csharp
-public Exceptional<Option<User>> Read(UserId Id)
-{
-    try
-    {
-        using var connection = new SqliteConnection(_connectionString);
-        connection.Open();
+La oss se på Controlleren nå.
+Når vi bruker en funksjon som returnerer en Option, så ønsker vi å
+ta hensyn til begge utfallene. Altså, vil vi ta hensyn til både tilfellet
+der Some returneres og tilfellet der None returneres.
+Nå som pattern matching er en greie i C# så da lar det seg jo enkelt løse slikt?
 
-        int intId = Id;
-        var users = connection
-            .Query(ReadSql, new { Id = intId })
-            .Select(User.Create);
-        return users.Any()
-            ? Some(users.First())
-            : None;
-    }
-    catch (Exception e)
-    {
-        return e;
-    }
-}
-```
+Dette vil desverre ikke kompilere. For at den skal kompilere må vi gjøre slikt.
+Men dette ser jo veldig stygt ut. Så hva gjør vi isteden?
 
-```Csharp
-public Exceptional<Option<User>> Read(UserId Id)
-{
-    try
-    {
-        using var connection = new SqliteConnection(_connectionString);
-        connection.Open();
+Husk at Option er en collection med plass til en verdi. Match funksjonen
+vil altså fungere her også.
 
-        int intId = Id;
-        var users = connection
-            .Query(ReadSql, new { Id = intId })
-            .Select(User.Create);
+Do: Match i controller
 
-        return users.Any()
-            ? Some(users.First())
-            : None;
-    }
-    catch (Exception e)
-    {
-        return e;
-    }
-}
-```
+Vi er ikke helt ferdig med write. Vi har et tredje utfall som kan komme
+fra dette kallet, menlig at noe går galt og en ekseption
+blir kastet.
+Som poengtert tidligere, gjør exceptions koden vår uforutsigbar.
+Vi burde istedenfor ha denne situasjonen representert i returverdien
+vår. Så hva med å bruke option for det og? Hva om vi først
+representerer en verdi som er None om noe gikk galt, og en Some av Option om det ikke
+gikk galt. Og så kan den igjen være None om vi ikke fant verdien og en Some av bruker hvis 
+vi har verdien.
 
-Kan vi gjøre dette med create-metoden? Klart vi kan. Akkurat nå så
-er metoden en void. Det fungerer ikke i den funksjonelle 
-verdenen. Så vi endrer den til en Unit.
-Den har ikke en returverdi, men siden operasjonen kan feile,
-så gjør vi denne også om til en exceptional.
-* TODO Litt generelt om Unit
+Det er på en måte det vi skal gjøre, men for å få det litt lettere har vi en 
+spesialversjon av option som heter Exceptional. Exceptional kan være Success eller Exception.
+Så får det være opp til oss hva vi gjør om den er exception.
 
+Do: Exceptional i repository
+Exceptional har en implicit constructor som bruker Exception, derfor trenger vi bare å returenre 
+Exception.
+Do: Match i controller
 
-```Csharp
-public Exceptional<Unit> Create(User user)
-{
-    try
-    {
-        using var connection = new SqliteConnection(_connectionString);
-        connection.Open();
+Da kan vi si oss ferdig med Read. Vi skal nå jobbe litt med Create
 
-        connection.Execute(CreateSql, user);
-    }
-    catch (Exception e)
-    {
-        return e;
-    }
+I repository, så ser vi at Create er en void, den gir oss altså
+ikke noen retur verdi.
+Men mange av teknikkene vi bruker i funksjonell programmering
+krever en retur verdi.
+For eksempel så ønsker vi her å returnere exception slik som i metoden ovenfor.
+Men vi kan ikke det. Exeptional<void> er jo ikke en greie.
 
-    return Unit();
-}
-```
+I funksjonelle språk så returnerer vi en tom tuple i slike tilfeller,
+Også kalt Unit. Desverre så støtter ikke c# (), så vi må bruke System.ValueTuple.
+Jeg har lagt ved et using statement som sier at Unit er Tuple
 
-```Csharp
-[HttpPost]
-public IActionResult Create(User user)
-    => _userRepository.Create(user)
-        .Match(
-            Exception: _ => Problem(),
-            Success: _ => Created("/user/", user)
-        );
-```
+TODO: Kan fylle på med mer stoff om unit her om tiden tillater s. 70
 
-## Steg 2
-Det neste trikset jeg skal vise dere, er partial application. Et problem er at diverse data er tilgjengelig på forskjellige tidspunkter
-i livssyklusen. For eksempel, sett bort i fra id feltet her, så vet vi hvordan SQL spørringa vil se ut allerede i det vi starter apiet.
-Så vi kan fint ta hånd om det allerede i det vi starter apiet.
+Do: Legg til Unit i repository
+Do: Legg til Exceptional i repository
+Do: Match i controller
 
-## Steg 3
-Føltes ikke det godt da. Vi har fjernet repository laget. Det er sikkert noen av dere som nå lurer på om det egentlig er behov for 
-controlleren. Jeg har i så fall gledelige nyheter til dere. Vi trenger den så  absolutt ikke. 
+## Steg 2 - Partial Application
+Det neste trikset jeg skal vise dere, er partial application.
+Akkurat nå så har vi en repository klasse som integrerer mot databasen vår. Når applikasjonen
+starter, så vet repository hvilket SQL spørring som vil bli brukt for denne operasjonen.
+Og den vet om connection string. Den vet ikke hva Id parameteren kommer til å være.
+
+Om vi ønsker å gjøre dette til en funksjonell applikasjon, så må vi klare å lage en funksjon som
+vet de samme tingene ved oppstart. Så derfor vil jeg endre Read til å returnere en funksjon isteden.
+Vi vil atså lage en funksjon som blir kallet ved oppstart med de parameterne vi vet på det tidspunktet.
+Funksjonen som den returnerer vil bli kallet mens applikasjonen kjører. 
+
+Do: Read blir statisk og returenrer en funskjon.
+Do: Det samme skjer med Create.
+Do: Flytt til Controller, slett repository
+
+Føltes ikke det godt da. Vi har fjernet repository laget. Det er sikkert noen av dere som nå lurer på om det egentlig er behov for
+controlleren. Jeg har i så fall gledelige nyheter til dere. Vi trenger den så  absolutt ikke.
+
+Do: Flytt til Program, slett Controller.
 
 Note. Bruker .NET 7. Minimal-api støtter ikke egendefinert model-binding. Har derimot hørt rykter om at det skal finnes en løsning for det i
-.NET 8, men jeg har ikke rukket å teste det ut enda. 
+.NET 8, men jeg har ikke rukket å teste det ut enda.
+
+## Konklusjon
+I apiet vi endte opp med så var det ingen klasser lengre.
+Men, den er fortsatt like avkoblet som den var tidligere.
+Read og Create endepunktene vet fortsatt like lite om database implementasjonen. 
+Den er også testbar, men nå som vi ikke bruker interfacer lengre, så trenger vi ikke 
+å sette opp Fakes.
+
+En annen ting er at interface segregation prinsippet ble brutt i den tidligere versjonen.
+Det forteller oss at klienter ikke burde avhenge av metoder de ikke bruker.
+IRepository interfacet hadde en metode for Read og en for Create. Om vi ikke skulle 
+brutt med det prinsippet, så måtte vi ha delt det i to.
+
+Det var det jeg hadde for dere. Håper det var underholdende.
+
+
+
 
 
 
