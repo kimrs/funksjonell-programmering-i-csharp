@@ -270,22 +270,26 @@ I funksjonelle språk så returnerer vi en tom tuple i slike tilfeller,
 Også kalt Unit. Desverre så støtter ikke c# (), så vi må bruke System.ValueTuple.
 Jeg har lagt ved et using statement som sier at Unit er Tuple
 
-TODO: Kan fylle på med mer stoff om unit her om tiden tillater s. 70
-
 Do: Legg til Unit i repository
 Do: Legg til Exceptional i repository
 Do: Match i controller
 
 ## Steg 2 - Partial Application
-Det neste trikset jeg skal vise dere, er partial application.
-Akkurat nå så har vi en repository klasse som integrerer mot databasen vår. Når applikasjonen
-starter, så vet repository hvilket SQL spørring som vil bli brukt for denne operasjonen.
-Og den vet om connection string. Den vet ikke hva Id parameteren kommer til å være.
+Det neste jeg skal gjøre, er å fjerne Repository klassen. Det som er inni
+skal være statiske funksjoner som kan kalles hvosomhelst.
+Om jeg gjør den statisk, så vil den trenge to parametre,
+ConnectionString of UserId. Vi vet hva ConnectionString er allerede ved oppstart fordi
+den står i appconfigen. UserId derimot, vet vi ikke før noen spør etter brukeren.
+Partial application er en teknikk som lar oss oppgi argumenter til en funksjon
+på forskjellige tider. Teknikken går ut på å la funksjonen returnere en ny funksjon som trenger
+det neste argumentet.
 
-Om vi ønsker å gjøre dette til en funksjonell applikasjon, så må vi klare å lage en funksjon som
-vet de samme tingene ved oppstart. Så derfor vil jeg endre Read til å returnere en funksjon isteden.
-Vi vil atså lage en funksjon som blir kallet ved oppstart med de parameterne vi vet på det tidspunktet.
-Funksjonen som den returnerer vil bli kallet mens applikasjonen kjører. 
+```fsharp
+Read: (ConnectionString, UserId) => User
+```
+```fsharp
+ConfigureRead: ConnectionString => (UserId => User)
+```
 
 Do: Read blir statisk og returenrer en funskjon.
 Do: Det samme skjer med Create.
