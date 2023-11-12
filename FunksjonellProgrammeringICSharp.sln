@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunksjonellProgrammeringICS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LaYumba.Functional", "functional-csharp-code\LaYumba.Functional\LaYumba.Functional.csproj", "{E5C9FE36-C050-4E25-A26A-0093A5E523CA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunksjonellProgrammering.UserApi", "FunksjonellProgrammering.UserApi\FunksjonellProgrammering.UserApi.csproj", "{751E3791-3A61-45CA-9E9A-4A3E8980311A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunksjonellProgrammering.UserApi.FP", "FunksjonellProgrammering.UserApi.FP\FunksjonellProgrammering.UserApi.FP.csproj", "{751E3791-3A61-45CA-9E9A-4A3E8980311A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "X.Shared", "X.Shared\X.Shared.csproj", "{221EC89C-B0DF-407C-B8A4-69CF101C7650}"
 EndProject
