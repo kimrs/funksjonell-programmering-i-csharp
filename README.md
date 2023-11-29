@@ -184,7 +184,9 @@ Også har bruken av value objects og valget om å ha dem i dtoen sørget for at
 valideringen er på plass uten at vi trenger å tenke på det.
 
 Det vi nå skal se på er hvordan applikasjonen vil se ut om vi introduseser noen 
-funksjonelle konsepter. Først ut er null/feil håndteringa.
+funksjonelle konsepter. Jeg blir å bruke et bibliotek skrevet av forfatteren.
+Han skriver at det ikke er for prod, så vi burde isteden bruke `language-ext` skrevet av Paul Louth
+Først ut er null/feil håndteringa.
 
 ## Steg 1 Core Functions
 I funksjonell programmering bruker man ikke null eller ekseptions.
